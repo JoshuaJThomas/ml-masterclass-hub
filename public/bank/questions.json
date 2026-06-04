@@ -1054,5 +1054,38 @@
     "hint": "Copy the coefficients list and convert the intercept array's first element to a float.",
     "solution": "model_state = {\n    'coef_': [0.12, -0.45, 0.89],\n    'intercept_': [4.5]\n}\nresult = {\n    'weights': list(model_state['coef_']),\n    'bias': float(model_state['intercept_'][0])\n}",
     "difficulty": "medium"
+  },
+  {
+    "id": "ch06-rolling-mean-05",
+    "chapter": 6,
+    "topic": "rolling window",
+    "prompt": "Compute a 3-period rolling mean on the 'temperature' column of `df`. Assign the resulting Series to `result`.",
+    "starterCode": "import pandas as pd\nimport numpy as np\ndf = pd.DataFrame({'temperature': [10.0, 12.0, 14.0, 16.0, 18.0]})\n# Assign to `result` the 3-period rolling mean of the temperature column\nresult = ...",
+    "check": "import numpy as np\nassert len(result) == 5\nassert np.isnan(result.iloc[0]) and np.isnan(result.iloc[1])\nassert np.allclose(result.dropna().values, [12.0, 14.0, 16.0])",
+    "hint": "Use `df['temperature'].rolling(3).mean()`. The first two values will be NaN because there are not yet 3 periods.",
+    "solution": "import pandas as pd\nimport numpy as np\ndf = pd.DataFrame({'temperature': [10.0, 12.0, 14.0, 16.0, 18.0]})\nresult = df['temperature'].rolling(3).mean()",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch18-tfidf-score-04",
+    "chapter": 18,
+    "topic": "TF-IDF",
+    "prompt": "Compute the TF-IDF weight using: TF = word_count / doc_length, IDF = ln(n_docs / docs_with_word), TF-IDF = TF × IDF. Assign the result to `result`.",
+    "starterCode": "import numpy as np\nword_count = 3        # times the word appears in the document\ndoc_length = 100      # total words in the document\nn_docs = 10           # total documents in the corpus\ndocs_with_word = 2    # documents that contain the word\n# Assign to `result` the TF-IDF score\nresult = ...",
+    "check": "import numpy as np\nassert abs(result - 0.04828313737302301) < 1e-9",
+    "hint": "TF = word_count / doc_length; IDF = np.log(n_docs / docs_with_word); result = TF * IDF.",
+    "solution": "import numpy as np\nword_count = 3\ndoc_length = 100\nn_docs = 10\ndocs_with_word = 2\ntf = word_count / doc_length\nidf = np.log(n_docs / docs_with_word)\nresult = float(tf * idf)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch21-average-linkage-04",
+    "chapter": 21,
+    "topic": "average linkage",
+    "prompt": "Average-linkage distance between two clusters is the mean of ALL pairwise distances (one point from `a`, one from `b`). Assign the average-linkage distance to `result`.",
+    "starterCode": "import numpy as np\na = np.array([[0.0, 0.0], [1.0, 0.0]])\nb = np.array([[5.0, 0.0], [3.0, 0.0]])\n# Assign to `result` the average-linkage distance\nresult = ...",
+    "check": "import numpy as np\nassert abs(result - 3.5) < 1e-9",
+    "hint": "Compute the Euclidean distance for all 4 cross-pairs (each point in `a` paired with each point in `b`) and take the mean.",
+    "solution": "import numpy as np\na = np.array([[0.0, 0.0], [1.0, 0.0]])\nb = np.array([[5.0, 0.0], [3.0, 0.0]])\nresult = float(np.mean([np.linalg.norm(pa - pb) for pa in a for pb in b]))",
+    "difficulty": "medium"
   }
 ]
