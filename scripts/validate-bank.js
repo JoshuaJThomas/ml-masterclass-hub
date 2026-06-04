@@ -64,6 +64,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     for (const e of errors) console.error('  - ' + e);
     process.exit(1);
   }
-  console.log(`Bank valid: ${questions.length} questions across chapters ` +
-    `${Math.min(...questions.map((q) => q.chapter))}-${Math.max(...questions.map((q) => q.chapter))}.`);
+  const chapters = questions.map((q) => q.chapter);
+  const range = chapters.length ? `${Math.min(...chapters)}-${Math.max(...chapters)}` : 'none';
+  console.log(`Bank valid: ${questions.length} questions across chapters ${range}.`);
 }
