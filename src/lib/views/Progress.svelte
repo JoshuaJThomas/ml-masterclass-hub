@@ -4,6 +4,7 @@
   import { loadProgress } from '../srs/progress.js';
   import { loadActivity, currentStreak } from '../srs/activity.js';
   import { chapterMastery, summarize } from '../stats/mastery.js';
+  import { loadSqlBank } from '../sql/loadSqlBank.js';
 
   let loading = $state(true);
   let error = $state('');
@@ -11,6 +12,7 @@
   let totals = $state({ total: 0, seen: 0, known: 0 });
   let streak = $state(0);
   let heatmap = $state([]);
+  let sqlTotals = $state({ total: 0, seen: 0, known: 0 });
 
   const CHAPTER_NAMES = {
     1: 'Python', 2: 'NumPy', 3: 'pandas', 4: 'Matplotlib', 5: 'Seaborn',
@@ -40,6 +42,10 @@
       totals = summarize(questions, progress, meta.completedThrough);
       streak = currentStreak(activity, now);
       heatmap = buildHeatmap(activity, now);
+      try {
+        const sqlBank = await loadSqlBank(import.meta.env.BASE_URL);
+        sqlTotals = summarize(sqlBank.map((q) => ({ ...q, chapter: 1 })), progress, 1);
+      } catch { /* SQL bank optional */ }
     } catch (e) {
       error = String(e.message || e);
     } finally {
@@ -83,6 +89,9 @@
         </div>
       {/each}
     </div>
+
+    <h2 class="heading-feature">SQL</h2>
+    <p class="body-large">{sqlTotals.known} mastered · {sqlTotals.seen} seen · {sqlTotals.total} total</p>
   {/if}
 </section>
 
