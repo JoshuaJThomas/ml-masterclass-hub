@@ -1,6 +1,6 @@
 <script>
   import Header from './lib/components/Header.svelte';
-  import PracticePlaceholder from './lib/views/PracticePlaceholder.svelte';
+  import Practice from './lib/views/Practice.svelte';
   import ProgressPlaceholder from './lib/views/ProgressPlaceholder.svelte';
   import { view } from './lib/stores/view.js';
 </script>
@@ -8,7 +8,7 @@
 <Header />
 <main>
   {#if $view === 'practice'}
-    <PracticePlaceholder />
+    <Practice />
   {:else}
     <ProgressPlaceholder />
   {/if}
