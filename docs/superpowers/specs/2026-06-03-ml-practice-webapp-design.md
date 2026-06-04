@@ -1,4 +1,4 @@
-# ML Masterclass Spaced-Repetition Practice Web App — Design
+# ML Masterclass Learning Hub — Design Spec
 
 **Date:** 2026-06-03
 **Owner:** lmaonade992@gmail.com
@@ -6,151 +6,191 @@
 
 ## Problem & Context
 
-The user is taking Jose Portilla's Python/ML Udemy course. The course materials live in
-a Google Drive `Udemy` folder containing chapters 0–23, each with several Jupyter
-notebooks. The user is currently on **chapter 8** and wants to keep older chapters
-(0–8) fresh so they don't forget them.
+The user is taking Jose Portilla's Python/ML Udemy course. Materials live in a Google
+Drive `Udemy` folder (chapters 0–23, each with several Jupyter notebooks). The user is
+currently on **chapter 8** and wants to keep earlier chapters (0–8) fresh so they don't
+forget them, and wants one **personal learning hub** — accessible on phone/laptop/PC —
+that is their home base for practicing and tracking progress.
 
-They want a **visually nice web app, accessible from any device** (phone, laptop,
-computer), that serves a **different set of coding practice exercises each day**, drawn
-across the chapters they've already completed (spaced repetition). It should be linked to
-their GitHub and grow as they progress through new chapters.
+## Vision
 
-## Goals
+A free, static, install-nothing web app that:
+- Lets the user **write and run real Python in the browser** (numpy/pandas/matplotlib)
+  against auto-checked exercises generated from their own course notebooks.
+- Uses a real **spaced-repetition memory engine** so the right exercises resurface at the
+  right time across all completed chapters.
+- Shows a **progress dashboard** (per-chapter mastery, streak, heatmap, due counts) — the
+  "hub" feeling.
+- Looks premium and calm, styled with the **Cohere DESIGN.md** system.
+- Grows itself nightly via a **content-gardener agent** that adds exercises.
 
-- A web app, hosted free and reachable from any device via a URL.
-- Each day presents a **different** spaced-repetition set of **coding exercises**
-  (problem + hint + worked solution) across completed chapters.
-- The same daily set appears on every device that day (no login/backend needed).
-- Easy to grow: when the user finishes a new chapter, its exercises are added and the
-  site updates itself.
-- Makes use of the user's existing Claude plan for the (occasional) generation work.
+## Scope
 
-## Non-Goals (for now — YAGNI)
+**v1 (build before launch) = Phase 1 + Phase 2:**
+- Interactive run-your-code daily practice (Phase 1)
+- Spaced-repetition memory engine + progress dashboard (Phase 2)
 
-- No morning email digest, file upkeep, or other automations from earlier brainstorming.
-- No auto-grading of the user's submitted code.
-- No cross-device progress sync / accounts (daily set is consistent across devices, but
-  personal streak/"done" state is per-device only).
-- No nightly auto-regeneration in v1 (daily freshness comes from *selection*, not
-  generation). This is a documented future phase.
+**Deferred (post-launch):**
+- **Phase 3 — Engagement:** multiple study modes (MCQ / flashcard / quiz), difficulty
+  tiers & rank progression, "compare your solution," AI solution review, extra polish.
+- **Phase 4 — Auto-growing:** the nightly 1am content-gardener agent (decision below) +
+  optional cross-device sync.
+
+## Decisions (locked)
+
+- **Sequencing:** bigger v1 (Phases 1+2) before launch.
+- **Night agent boundary:** *content gardener, auto-publish* — it may only add/refresh
+  exercises and write a changelog; those auto-publish. No structural/feature/redesign
+  changes without a supervised session. (Built in Phase 4.)
+- **Daily exercise volume:** 5 (used as the daily new-card limit; due reviews are on top).
+- **Progress storage:** per-device (localStorage) for v1; cross-device sync deferred.
+- **Design system:** Cohere `DESIGN.md`, also packaged as a reusable skill (below).
+- **Source access:** Claude reads notebooks from Google Drive interactively.
 
 ## Source of Truth
 
 - Google Drive `Udemy` folder, chapters `0`–`23`, each with multiple `.ipynb` files.
-- Only chapters **0 through `completedThrough`** (currently 8) are in scope at any time.
-- Claude reads notebooks from Drive **interactively** (during a session), so there is no
-  headless-auth problem. The user raises `completedThrough` when they finish a chapter,
-  and Claude reads just the new chapter(s) to extend the bank.
+- Only chapters `0`–`completedThrough` (currently 8) are in scope. User raises
+  `completedThrough` on finishing a chapter; Claude reads the new chapter(s) and appends.
+
+## Competitive Building Blocks (what we're adapting)
+
+In-browser run-and-check (DataCamp/Codecademy, via Pyodide) · true SRS scheduling
+(Anki/Execute Program, via FSRS) · streaks/XP/daily goal (Duolingo) · progress heatmap
+(GitHub) · per-chapter mastery + weak-spot targeting (Khan Academy) · difficulty/rank
+progression (Codewars/WaniKani, Phase 3) · multiple study modes (Quizlet, Phase 3) ·
+compare-solution + AI review (LeetCode/Exercism, Phase 3) · calm bite-sized "always doing"
+feel (Brilliant). All achievable free + static.
 
 ## Architecture
 
-Three phases. v1 = Phases 1 + 2. Phase 3 is future/optional.
+### Content: the question bank
 
-### Phase 1 — Question Bank Generation (occasional, per new chapter)
-
-- Claude reads the in-scope chapter notebooks from Drive.
-- For each chapter, generates a set of **coding exercises**. Each exercise:
-  - `id` — stable unique id, e.g. `ch03-pandas-groupby-01`
-  - `chapter` — integer
-  - `topic` — short label
-  - `prompt` — the task to write code for
-  - `hint` — one nudge
-  - `solution` — worked code solution (revealed on demand)
-  - `difficulty` — `easy` | `medium` | `hard`
-- Output: a single `questions.json` committed to the repo:
+- Claude reads in-scope chapter notebooks and generates **coding exercises**, stored as
+  `bank/questions.json` committed to the repo. Each exercise:
 
   ```json
   {
-    "completedThrough": 8,
-    "generatedAt": "2026-06-03",
-    "questions": [
-      {
-        "id": "ch03-pandas-groupby-01",
-        "chapter": 3,
-        "topic": "pandas groupby",
-        "prompt": "Given a DataFrame `df` with columns 'team' and 'points', return the average points per team.",
-        "hint": "groupby + an aggregation.",
-        "solution": "df.groupby('team')['points'].mean()",
-        "difficulty": "easy"
-      }
-    ]
+    "id": "ch03-pandas-groupby-01",
+    "chapter": 3,
+    "topic": "pandas groupby",
+    "prompt": "Given DataFrame `df` with columns 'team' and 'points', assign to `result` the average points per team.",
+    "starterCode": "import pandas as pd\n# df is provided\nresult = ...",
+    "check": "expected output / assertion the runner verifies",
+    "hint": "groupby + an aggregation.",
+    "solution": "result = df.groupby('team')['points'].mean()",
+    "difficulty": "easy"
   }
   ```
 
-- Adding a chapter = read that chapter, append its exercises, bump `completedThrough`,
-  commit. Existing ids are never reused or renumbered.
+- `bank/meta.json` holds `completedThrough` and `generatedAt`. Existing ids are never
+  reused or renumbered, so progress history stays valid as the bank grows.
 
-### Phase 2 — The Website (used daily)
+### Runtime: in-browser Python (Pyodide)
 
-- **Static site** (vanilla HTML/CSS/JS, no build step) in the same repo, served by
-  **GitHub Pages**.
-- On load it fetches `questions.json` and selects the **day's set**:
-  - **Pool:** all questions with `chapter <= completedThrough`.
-  - **Daily selection:** deterministic, seeded by the current date (so all devices match
-    that day). A seeded PRNG picks `N` questions (default **5**).
-  - **Spaced-repetition weighting:** selection favors **older chapters** (further below
-    the current chapter) so chapters 1–3 resurface as often as recent ones, rather than
-    the newest chapter dominating. Concretely: weight each question by how "due" its
-    chapter is, then sample without replacement using the date seed. Aim for a spread
-    across chapters within each day's set (avoid 5 from one chapter).
-- **UI per exercise:** the prompt, a "Show hint" toggle, and a "Reveal solution" toggle
-  (solution hidden by default so it's real practice). Clean, mobile-friendly layout.
-- **Per-device progress (localStorage only):** mark each exercise "got it / review",
-  show a simple daily-completion + streak indicator. This is local to the device and does
-  **not** affect the (date-deterministic) selection, preserving cross-device consistency.
+- **Pyodide** (WebAssembly Python with numpy/pandas/matplotlib) loaded from CDN runs the
+  user's code entirely client-side — no backend, no cost.
+- An exercise provides `starterCode`; the user edits in an embedded code editor
+  (CodeMirror), runs it, and the runner evaluates `check` (assertion/expected output) to
+  pass/fail. Output and errors are shown inline.
 
-### Phase 3 — Overnight Bank Expansion (future, optional)
+### Memory engine: spaced repetition (FSRS)
 
-- A scheduled Claude job that periodically generates *additional* / harder variants for
-  existing chapters and commits them, so the bank deepens over time. Uses the user's plan
-  capacity. Deferred until Phases 1–2 are proven.
+- Each exercise the user has seen has an SRS card state (stored per-device in
+  localStorage), scheduled with **FSRS** (`ts-fsrs`).
+- **Grading is automatic from execution:** pass on first run → "Good"; pass after hint or
+  retries → "Hard"; reveal solution / give up → "Again". Manual override allowed.
+- **Today's set** = cards *due* today + up to 5 *new* cards drawn from completed chapters,
+  weighted toward older/weaker chapters (Khan-style targeting).
+- Note: with real SRS the daily set is *personalized and per-device* (Anki model), so it
+  is no longer identical across devices. Cross-device parity returns only if/when sync is
+  added (Phase 4). This is an accepted trade for a real memory engine.
+
+### Dashboard (the hub)
+
+- Per-chapter **mastery bars** (share of that chapter's cards in "review/known" state).
+- **Streak** + daily-goal ring; **GitHub-style heatmap** of days practiced.
+- **Due today / new today / total** counts; quick "Start today's practice" entry point.
+- All derived from localStorage SRS state + the bank.
+
+### Hosting & stack
+
+- **Static site** built with **Vite + Svelte** (light, low-boilerplate, good for a small
+  reactive app with a dashboard), exported static and deployed to **GitHub Pages** via a
+  GitHub Actions workflow on push. Pyodide + fonts via CDN. Fully free, no server.
+- *(Framework is a recommendation; can be revisited at plan time. Pyodide + static
+  GitHub Pages hosting are fixed.)*
+
+### Design system + skill
+
+- Styling strictly follows the project `DESIGN.md` (Cohere): canvas white default,
+  deep-green/navy bands for emphasis, near-black pill primary CTAs, 8/22px card radii,
+  Unica77/CohereText/CohereMono type split (with documented web-safe fallbacks since the
+  proprietary fonts aren't bundled), flat depth, restrained accents.
+- **Gamification adapted to Cohere's restraint:** streaks/XP/mastery rendered with mono
+  labels, hairline rules, deep-green accents and pale-green/coral chips — a calm "research
+  lab" aesthetic, *not* loud game chrome (DESIGN.md forbids broad decorative accent fills
+  and heavy shadows).
+- **Packaged as a skill:** a reusable skill that points the agent (and the night agent) at
+  `DESIGN.md` and the adaptation rules, so all current and future UI stays consistent.
+  Authored via the writing-skills process during implementation.
 
 ## Data Flow
 
 ```
 Drive (Udemy notebooks, ch 0–8)
-        │  (Claude reads, interactively)
+        │  Claude reads (interactive) → generates exercises
         ▼
-   questions.json  ──commit──▶  GitHub repo ──▶ GitHub Pages (static site)
-                                                      │
-                                          fetch questions.json
-                                                      ▼
-                                   date-seeded spaced-repetition selection
-                                                      ▼
-                                     today's exercises on phone/laptop/PC
+   bank/questions.json + bank/meta.json ──commit──▶ GitHub repo
+        │                                              │ GitHub Actions build
+        ▼                                              ▼
+   (Phase 4: nightly content-gardener appends)   GitHub Pages static site
+                                                       │
+                              fetch bank → FSRS picks due+new → run code (Pyodide)
+                              → auto-grade → reschedule → update dashboard
+                                                       ▼
+                                   today's practice + progress on any device
 ```
 
 ## Components & Interfaces
 
-- `questions.json` — the bank + `completedThrough`. The single contract between
-  generation and the website.
-- `index.html` / `style.css` / `app.js` — the static site. `app.js` owns: fetch bank →
-  seeded daily selection + weighting → render → localStorage progress.
-- Generation is a documented Claude procedure (read chapter N notebooks → append
-  exercises → bump `completedThrough` → commit), not application code.
+- `bank/questions.json` + `bank/meta.json` — the content contract between generation and
+  the app. Stable ids.
+- `DESIGN.md` — the styling contract; enforced via the design skill.
+- App modules (Svelte): **bank loader**, **SRS scheduler** (ts-fsrs wrapper +
+  localStorage), **Pyodide code runner** (load + execute + check), **exercise view**
+  (editor, run, hint, reveal), **dashboard** (mastery/streak/heatmap), **settings**
+  (`completedThrough`, daily new-card limit, reset progress).
+- Generation procedure — documented Claude steps (read chapter N → append exercises → bump
+  `completedThrough` → commit), reused by the Phase-4 night agent.
 
 ## Error Handling
 
-- Missing/empty `questions.json` → site shows a friendly "no questions yet" state.
-- Fewer questions in pool than `N` → show all available, no crash.
-- Malformed entries are skipped, not fatal.
-- localStorage unavailable (private mode) → progress silently disabled, practice still
-  works.
+- Missing/empty bank → friendly "no exercises yet" state.
+- Pyodide load failure / offline → clear message, retry; exercises still readable.
+- Fewer due+new than target → show what's available, no crash.
+- Malformed exercise entries skipped, not fatal.
+- localStorage unavailable (private mode) → progress disabled gracefully; practice works.
+- User code errors/timeouts in Pyodide → caught and shown as failed run, never crash app.
 
 ## Testing
 
-- A small fixture `questions.json` to verify: date-seeded selection is stable for a given
-  date, varies across dates, spreads across chapters, and respects `completedThrough`.
-- Manual check on phone + laptop that the same date yields the same set.
-- Verify reveal/hint toggles and the empty/too-few-questions edge cases.
+- Fixture bank to verify: FSRS scheduling (due/new selection, grade → next interval),
+  weak-chapter weighting of new cards, `completedThrough` gating.
+- Pyodide runner: a passing solution grades pass, a wrong one grades fail, an erroring one
+  is caught.
+- Dashboard math: mastery %, streak rollover, heatmap counts from known SRS state.
+- Manual: phone + laptop load, run code, edge cases (empty bank, private mode).
 
 ## Dependencies
 
-- User's GitHub account (confirmed) — one new repo, GitHub Pages enabled.
-- Google Drive access to the `Udemy` folder (confirmed) — read-only, for generation.
+- GitHub account (confirmed) — one repo + Pages enabled + Actions deploy.
+- Google Drive access to `Udemy` (confirmed) — read-only, for generation.
+- CDNs: Pyodide, fonts. (Acceptable external deps; site degrades gracefully.)
 
 ## Open Questions
 
-- Exact value of `N` per day (default assumed **5**; light **3** is an option).
-- Visual style preference (theme/colors) — can be decided at build time.
+- Final framework (Vite+Svelte recommended; Pyodide + static Pages fixed regardless).
+- Web-safe font fallbacks to approximate Unica77/CohereText/CohereMono (e.g. Inter + Space
+  Grotesk + a mono) — chosen at build time.
+- Daily-goal target and streak rules (e.g. "complete N exercises" counts as a day).
