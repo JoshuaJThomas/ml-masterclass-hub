@@ -16,5 +16,8 @@
     "svelte": "^5.55.5",
     "vite": "^8.0.12",
     "vitest": "^4.1.8"
+  },
+  "dependencies": {
+    "ts-fsrs": "^5.4.1"
   }
 }
