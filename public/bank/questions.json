@@ -548,5 +548,181 @@
     "hint": "result = pred + lr * residual.",
     "solution": "import numpy as np\npred = np.array([2.0, 4.0])\nresidual = np.array([1.0, -2.0])\nlr = 0.1\nresult = pred + lr * residual",
     "difficulty": "medium"
+  },
+  {
+    "id": "ch17-precision-01",
+    "chapter": 17,
+    "topic": "precision",
+    "prompt": "Compute precision = TP / (TP + FP) for the binary predictions. Assign it to `result`.",
+    "starterCode": "import numpy as np\ny_true = np.array([1, 1, 1, 1, 0, 0])\ny_pred = np.array([1, 1, 0, 0, 1, 0])\n# Assign to `result` the precision\nresult = ...",
+    "check": "assert abs(result - (2/3)) < 1e-9",
+    "hint": "TP = predicted 1 and true 1; FP = predicted 1 and true 0.",
+    "solution": "import numpy as np\ny_true = np.array([1, 1, 1, 1, 0, 0])\ny_pred = np.array([1, 1, 0, 0, 1, 0])\ntp = int(((y_pred == 1) & (y_true == 1)).sum())\nfp = int(((y_pred == 1) & (y_true == 0)).sum())\nresult = tp / (tp + fp)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch17-recall-02",
+    "chapter": 17,
+    "topic": "recall",
+    "prompt": "Compute recall = TP / (TP + FN) for the binary predictions. Assign it to `result`.",
+    "starterCode": "import numpy as np\ny_true = np.array([1, 1, 1, 1, 0, 0])\ny_pred = np.array([1, 1, 0, 0, 1, 0])\n# Assign to `result` the recall\nresult = ...",
+    "check": "assert abs(result - 0.5) < 1e-9",
+    "hint": "FN = predicted 0 but true 1.",
+    "solution": "import numpy as np\ny_true = np.array([1, 1, 1, 1, 0, 0])\ny_pred = np.array([1, 1, 0, 0, 1, 0])\ntp = int(((y_pred == 1) & (y_true == 1)).sum())\nfn = int(((y_pred == 0) & (y_true == 1)).sum())\nresult = tp / (tp + fn)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch18-bow-01",
+    "chapter": 18,
+    "topic": "bag of words",
+    "prompt": "Build a bag-of-words count vector for `text` over the ordered `vocab`. Assign to `result` a list of counts.",
+    "starterCode": "vocab = ['cat', 'dog', 'bird']\ntext = 'cat dog cat'\n# Assign to `result` the count of each vocab word in text\nresult = ...",
+    "check": "assert result == [2, 1, 0]",
+    "hint": "Split the text into words and count each vocab term.",
+    "solution": "vocab = ['cat', 'dog', 'bird']\ntext = 'cat dog cat'\nwords = text.split()\nresult = [words.count(w) for w in vocab]",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch18-prior-02",
+    "chapter": 18,
+    "topic": "class prior",
+    "prompt": "Compute the Naive Bayes prior probability of the class 'spam' in `labels`. Assign it to `result`.",
+    "starterCode": "labels = ['spam', 'ham', 'spam', 'spam']\n# Assign to `result` P(spam)\nresult = ...",
+    "check": "assert abs(result - 0.75) < 1e-9",
+    "hint": "prior = count of 'spam' / total labels.",
+    "solution": "labels = ['spam', 'ham', 'spam', 'spam']\nresult = labels.count('spam') / len(labels)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch19-l2norm-01",
+    "chapter": 19,
+    "topic": "vector normalization",
+    "prompt": "Normalize vector `v` to unit length (L2 norm = 1). Assign the result to `result`.",
+    "starterCode": "import numpy as np\nv = np.array([3.0, 4.0])\n# Assign to `result` the unit-length vector\nresult = ...",
+    "check": "import numpy as np\nassert abs(np.linalg.norm(result) - 1.0) < 1e-9\nassert np.allclose(result, [0.6, 0.8])",
+    "hint": "Divide by `np.linalg.norm(v)`.",
+    "solution": "import numpy as np\nv = np.array([3.0, 4.0])\nresult = v / np.linalg.norm(v)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch19-total-variance-02",
+    "chapter": 19,
+    "topic": "total variance",
+    "prompt": "Compute the total variance of `data` (sum of the per-feature variances). Assign it to `result`.",
+    "starterCode": "import numpy as np\ndata = np.array([[1.0, 10.0], [2.0, 20.0], [3.0, 30.0]])\n# Assign to `result` the total variance\nresult = ...",
+    "check": "assert abs(result - 67.33333333333333) < 1e-6",
+    "hint": "`data.var(axis=0)` gives per-feature variance; sum it.",
+    "solution": "import numpy as np\ndata = np.array([[1.0, 10.0], [2.0, 20.0], [3.0, 30.0]])\nresult = float(data.var(axis=0).sum())",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch20-assign-01",
+    "chapter": 20,
+    "topic": "cluster assignment",
+    "prompt": "Assign each point in `points` to the index of its nearest centroid. Assign to `result` the array of assignments.",
+    "starterCode": "import numpy as np\npoints = np.array([[0.1, 0.1], [4.9, 5.1]])\ncentroids = np.array([[0.0, 0.0], [5.0, 5.0]])\n# Assign to `result` the nearest-centroid index for each point\nresult = ...",
+    "check": "assert result.tolist() == [0, 1]",
+    "hint": "For each point, compute distances to all centroids and take argmin.",
+    "solution": "import numpy as np\npoints = np.array([[0.1, 0.1], [4.9, 5.1]])\ncentroids = np.array([[0.0, 0.0], [5.0, 5.0]])\nresult = np.array([np.argmin(np.linalg.norm(centroids - p, axis=1)) for p in points])",
+    "difficulty": "hard"
+  },
+  {
+    "id": "ch20-centroid-update-02",
+    "chapter": 20,
+    "topic": "centroid update",
+    "prompt": "Update a k-means centroid to the mean of its assigned `points`. Assign the new centroid to `result`.",
+    "starterCode": "import numpy as np\npoints = np.array([[0.0, 0.0], [2.0, 2.0], [4.0, 4.0]])\n# Assign to `result` the new centroid\nresult = ...",
+    "check": "import numpy as np\nassert np.allclose(result, [2.0, 2.0])",
+    "hint": "Mean down the rows: `points.mean(axis=0)`.",
+    "solution": "import numpy as np\npoints = np.array([[0.0, 0.0], [2.0, 2.0], [4.0, 4.0]])\nresult = points.mean(axis=0)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch21-single-linkage-01",
+    "chapter": 21,
+    "topic": "single linkage",
+    "prompt": "Single-linkage distance between two clusters is the smallest distance between any point in `a` and any point in `b`. Assign it to `result`.",
+    "starterCode": "import numpy as np\na = np.array([[0.0, 0.0], [1.0, 0.0]])\nb = np.array([[5.0, 0.0], [3.0, 0.0]])\n# Assign to `result` the single-linkage distance\nresult = ...",
+    "check": "assert abs(result - 2.0) < 1e-9",
+    "hint": "Compute every pairwise distance between a-points and b-points, take the minimum.",
+    "solution": "import numpy as np\na = np.array([[0.0, 0.0], [1.0, 0.0]])\nb = np.array([[5.0, 0.0], [3.0, 0.0]])\nresult = float(min(np.linalg.norm(pa - pb) for pa in a for pb in b))",
+    "difficulty": "hard"
+  },
+  {
+    "id": "ch21-merge-count-02",
+    "chapter": 21,
+    "topic": "agglomerative merges",
+    "prompt": "Agglomerative clustering starts with `n` singleton clusters. After `m` merges, assign to `result` the number of clusters remaining.",
+    "starterCode": "n = 5\nm = 2\n# Assign to `result` the clusters remaining after m merges\nresult = ...",
+    "check": "assert result == 3",
+    "hint": "Each merge reduces the cluster count by one.",
+    "solution": "n = 5\nm = 2\nresult = n - m",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch22-neighbors-01",
+    "chapter": 22,
+    "topic": "epsilon neighborhood",
+    "prompt": "Count how many OTHER points lie within distance `eps` of `points[0]`. Assign the count to `result`.",
+    "starterCode": "import numpy as np\npoints = np.array([[0.0, 0.0], [1.0, 0.0], [2.0, 0.0], [10.0, 0.0]])\neps = 1.5\n# Assign to `result` the number of neighbours of points[0] (excluding itself)\nresult = ...",
+    "check": "assert int(result) == 1",
+    "hint": "Distances from points[0]; count those that are > 0 and <= eps.",
+    "solution": "import numpy as np\npoints = np.array([[0.0, 0.0], [1.0, 0.0], [2.0, 0.0], [10.0, 0.0]])\neps = 1.5\nd = np.linalg.norm(points - points[0], axis=1)\nresult = int(((d > 0) & (d <= eps)).sum())",
+    "difficulty": "hard"
+  },
+  {
+    "id": "ch22-core-point-02",
+    "chapter": 22,
+    "topic": "core point",
+    "prompt": "In DBSCAN a point is a CORE point if at least `min_samples` points (including itself) lie within `eps`. Assign to `result` whether `points[0]` is a core point (True/False).",
+    "starterCode": "import numpy as np\npoints = np.array([[0.0, 0.0], [1.0, 0.0], [2.0, 0.0], [10.0, 0.0]])\neps = 1.5\nmin_samples = 2\n# Assign to `result` True if points[0] is a core point\nresult = ...",
+    "check": "assert result == True",
+    "hint": "Count points with distance <= eps (this includes the point itself), compare to min_samples.",
+    "solution": "import numpy as np\npoints = np.array([[0.0, 0.0], [1.0, 0.0], [2.0, 0.0], [10.0, 0.0]])\neps = 1.5\nmin_samples = 2\nd = np.linalg.norm(points - points[0], axis=1)\nresult = bool(int((d <= eps).sum()) >= min_samples)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch23-explained-var-01",
+    "chapter": 23,
+    "topic": "explained variance",
+    "prompt": "Given PCA eigenvalues `eigvals`, compute the explained-variance ratio of each component. Assign to `result` the array of ratios.",
+    "starterCode": "import numpy as np\neigvals = np.array([4.0, 1.0])\n# Assign to `result` each eigenvalue's share of the total\nresult = ...",
+    "check": "import numpy as np\nassert np.allclose(result, [0.8, 0.2])",
+    "hint": "Divide each eigenvalue by the sum of eigenvalues.",
+    "solution": "import numpy as np\neigvals = np.array([4.0, 1.0])\nresult = eigvals / eigvals.sum()",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch23-center-data-02",
+    "chapter": 23,
+    "topic": "mean centering",
+    "prompt": "PCA first centers the data. Subtract each column's mean from `X`. Assign the centered matrix to `result`.",
+    "starterCode": "import numpy as np\nX = np.array([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]])\n# Assign to `result` the mean-centered data\nresult = ...",
+    "check": "import numpy as np\nassert np.allclose(result.mean(axis=0), [0.0, 0.0])",
+    "hint": "result = X - X.mean(axis=0) (broadcasts across rows).",
+    "solution": "import numpy as np\nX = np.array([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]])\nresult = X - X.mean(axis=0)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch24-linear-predict-01",
+    "chapter": 24,
+    "topic": "deployed prediction",
+    "prompt": "A deployed linear model predicts y = X @ w + b. Compute the predictions for `X`. Assign them to `result`.",
+    "starterCode": "import numpy as np\nX = np.array([[1.0, 2.0], [3.0, 4.0]])\nw = np.array([0.5, 2.0])\nb = 1.0\n# Assign to `result` the predictions\nresult = ...",
+    "check": "import numpy as np\nassert np.allclose(result, [5.5, 10.5])",
+    "hint": "Matrix-multiply X by w, then add b: `X @ w + b`.",
+    "solution": "import numpy as np\nX = np.array([[1.0, 2.0], [3.0, 4.0]])\nw = np.array([0.5, 2.0])\nb = 1.0\nresult = X @ w + b",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch24-json-roundtrip-02",
+    "chapter": 24,
+    "topic": "serializing params",
+    "prompt": "Deploying a model often means saving its params as JSON. Round-trip `params` through JSON (serialize then parse). Assign the parsed dict to `result`.",
+    "starterCode": "import json\nparams = {'w': [0.5, 2.0], 'b': 1.0}\n# Assign to `result` the params after a JSON serialize + parse round-trip\nresult = ...",
+    "check": "assert result == {'w': [0.5, 2.0], 'b': 1.0}\nassert result['b'] == 1.0",
+    "hint": "`json.loads(json.dumps(params))`.",
+    "solution": "import json\nparams = {'w': [0.5, 2.0], 'b': 1.0}\nresult = json.loads(json.dumps(params))",
+    "difficulty": "easy"
   }
 ]
