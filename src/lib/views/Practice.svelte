@@ -1,6 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import CodeEditor from '../components/CodeEditor.svelte';
+  import SolutionDiff from '../components/SolutionDiff.svelte';
   import { loadBank } from '../bank/loadBank.js';
   import { buildDailySet } from '../srs/dailySet.js';
   import { newCard, grade, ratingFor } from '../srs/scheduler.js';
@@ -21,6 +22,8 @@
   let status = $state('');
   let running = $state(false);
   let result = $state(null);
+  let submittedCode = $state('');
+  let showCompare = $state(false);
 
   const today = () => new Date();
   const current = $derived(exercises[index]);
@@ -43,6 +46,7 @@
   function resetForCurrent() {
     code = current?.starterCode ?? '';
     showHint = false; showSolution = false; usedHelp = false; result = null;
+    showCompare = false; submittedCode = '';
   }
 
   function go(delta) {
@@ -76,6 +80,7 @@
     try {
       const pyodide = await getPyodide((s) => (status = s));
       result = await runCode(pyodide, code, current.check);
+      if (result.passed) submittedCode = code;
       if (result.passed) gradeOnce(true);
     } catch (e) {
       result = { passed: false, stdout: '', error: String(e.message || e) };
@@ -126,6 +131,14 @@
         {#if result.error}<pre>{result.error}</pre>{/if}
         {#if result.stdout}<pre class="stdout">{result.stdout}</pre>{/if}
       </div>
+      {#if result.passed}
+        <button class="btn-secondary" onclick={() => (showCompare = !showCompare)}>
+          {showCompare ? 'Hide comparison' : 'Compare with model solution'}
+        </button>
+        {#if showCompare}
+          <SolutionDiff userCode={submittedCode} solution={current.solution} />
+        {/if}
+      {/if}
     {/if}
 
     {#if showSolution}
