@@ -83,7 +83,7 @@
     "topic": "axis aggregation",
     "prompt": "Given the 2-D array `mat`, assign to `result` a 1-D array of the column sums (sum down each column).",
     "starterCode": "import numpy as np\nmat = np.array([[1, 2, 3], [4, 5, 6]])\n# Assign to `result` the column sums\nresult = ...",
-    "check": "assert result.tolist() == [5, 7, 9]",
+    "check": "assert list(result) == [5, 7, 9]",
     "hint": "Summing down columns means collapsing the rows: `mat.sum(axis=0)`.",
     "solution": "import numpy as np\nmat = np.array([[1, 2, 3], [4, 5, 6]])\nresult = mat.sum(axis=0)",
     "difficulty": "medium"
@@ -175,7 +175,7 @@
     "check": "assert sorted(result['name']) == ['Al', 'Al', 'Bo']\nassert len(result) == 3",
     "hint": "Use `pd.merge(orders, customers, on='cust_id')` (inner join is the default).",
     "solution": "import pandas as pd\norders = pd.DataFrame({'cust_id': [1, 2, 1], 'amount': [100, 200, 50]})\ncustomers = pd.DataFrame({'cust_id': [1, 2], 'name': ['Al', 'Bo']})\nresult = pd.merge(orders, customers, on='cust_id')",
-    "difficulty": "hard"
+    "difficulty": "medium"
   },
 
   {
@@ -217,7 +217,7 @@
     "topic": "subplots",
     "prompt": "Create a figure with a 1-row, 2-column grid of subplots. Assign the figure to `fig` and the array of axes to `axes`.",
     "starterCode": "import matplotlib\nmatplotlib.use('Agg')\nimport matplotlib.pyplot as plt\n# create a 1x2 grid of subplots\nfig, axes = ...",
-    "check": "assert len(axes) == 2\nassert fig is not None",
+    "check": "import matplotlib\nassert len(axes) == 2\nassert all(isinstance(a, matplotlib.axes.Axes) for a in axes)",
     "hint": "`plt.subplots(1, 2)` returns `(fig, axes)` where axes has length 2.",
     "solution": "import matplotlib\nmatplotlib.use('Agg')\nimport matplotlib.pyplot as plt\nfig, axes = plt.subplots(1, 2)",
     "difficulty": "medium"
@@ -340,22 +340,22 @@
     "id": "ch08-mae-01",
     "chapter": 8,
     "topic": "regression metrics",
-    "prompt": "Compute the Mean Absolute Error (MAE) between `y_true` and `y_pred`. Assign it to `result`.",
-    "starterCode": "import numpy as np\ny_true = np.array([3.0, 5.0, 2.5, 7.0])\ny_pred = np.array([2.5, 5.5, 2.0, 6.5])\n# Assign to `result` the MAE\nresult = ...",
-    "check": "assert abs(result - 0.5) < 1e-9",
+    "prompt": "Compute the Mean Absolute Error (MAE) between `y_true` and `y_pred`. Assign it to `result`. (Note: one prediction is off by 4, the rest are exact.)",
+    "starterCode": "import numpy as np\ny_true = np.array([3.0, 5.0, 7.0, 9.0])\ny_pred = np.array([3.0, 5.0, 7.0, 5.0])\n# Assign to `result` the MAE\nresult = ...",
+    "check": "assert abs(result - 1.0) < 1e-9",
     "hint": "MAE is the mean of the absolute differences: `np.mean(np.abs(y_true - y_pred))`.",
-    "solution": "import numpy as np\ny_true = np.array([3.0, 5.0, 2.5, 7.0])\ny_pred = np.array([2.5, 5.5, 2.0, 6.5])\nresult = float(np.mean(np.abs(y_true - y_pred)))",
+    "solution": "import numpy as np\ny_true = np.array([3.0, 5.0, 7.0, 9.0])\ny_pred = np.array([3.0, 5.0, 7.0, 5.0])\nresult = float(np.mean(np.abs(y_true - y_pred)))",
     "difficulty": "easy"
   },
   {
     "id": "ch08-rmse-02",
     "chapter": 8,
     "topic": "regression metrics",
-    "prompt": "Compute the Root Mean Squared Error (RMSE) between `y_true` and `y_pred`. Assign it to `result`.",
-    "starterCode": "import numpy as np\ny_true = np.array([3.0, 5.0, 2.5, 7.0])\ny_pred = np.array([2.5, 5.5, 2.0, 6.5])\n# Assign to `result` the RMSE\nresult = ...",
-    "check": "assert abs(result - 0.5) < 1e-9",
+    "prompt": "Compute the Root Mean Squared Error (RMSE) between `y_true` and `y_pred`. Assign it to `result`. (Same data as the MAE exercise — notice RMSE is larger, because it penalizes the one big error more.)",
+    "starterCode": "import numpy as np\ny_true = np.array([3.0, 5.0, 7.0, 9.0])\ny_pred = np.array([3.0, 5.0, 7.0, 5.0])\n# Assign to `result` the RMSE\nresult = ...",
+    "check": "assert abs(result - 2.0) < 1e-9",
     "hint": "RMSE = sqrt(mean of squared errors): `np.sqrt(np.mean((y_true - y_pred)**2))`.",
-    "solution": "import numpy as np\ny_true = np.array([3.0, 5.0, 2.5, 7.0])\ny_pred = np.array([2.5, 5.5, 2.0, 6.5])\nresult = float(np.sqrt(np.mean((y_true - y_pred)**2)))",
+    "solution": "import numpy as np\ny_true = np.array([3.0, 5.0, 7.0, 9.0])\ny_pred = np.array([3.0, 5.0, 7.0, 5.0])\nresult = float(np.sqrt(np.mean((y_true - y_pred)**2)))",
     "difficulty": "medium"
   },
   {
@@ -363,21 +363,21 @@
     "chapter": 8,
     "topic": "fitting a line",
     "prompt": "Fit a straight line (degree 1) to the points (`x`, `y`) and assign the SLOPE of the best-fit line to `result`.",
-    "starterCode": "import numpy as np\nx = np.array([0.0, 1.0, 2.0, 3.0])\ny = np.array([1.0, 3.0, 5.0, 7.0])\n# Assign to `result` the slope of the best-fit line\nresult = ...",
-    "check": "assert abs(result - 2.0) < 1e-6",
-    "hint": "`np.polyfit(x, y, 1)` returns `[slope, intercept]`. Take the first element.",
-    "solution": "import numpy as np\nx = np.array([0.0, 1.0, 2.0, 3.0])\ny = np.array([1.0, 3.0, 5.0, 7.0])\nresult = float(np.polyfit(x, y, 1)[0])",
+    "starterCode": "import numpy as np\nx = np.array([0.0, 1.0, 2.0, 3.0])\ny = np.array([1.0, 2.0, 2.0, 5.0])\n# Assign to `result` the slope of the best-fit line\nresult = ...",
+    "check": "assert abs(result - 1.2) < 1e-6",
+    "hint": "`np.polyfit(x, y, 1)` returns `[slope, intercept]`. Take the first element. (The data isn't perfectly straight, so you must least-squares fit it, not just use the endpoints.)",
+    "solution": "import numpy as np\nx = np.array([0.0, 1.0, 2.0, 3.0])\ny = np.array([1.0, 2.0, 2.0, 5.0])\nresult = float(np.polyfit(x, y, 1)[0])",
     "difficulty": "medium"
   },
   {
     "id": "ch08-r2-score-04",
     "chapter": 8,
     "topic": "R-squared",
-    "prompt": "Compute the R^2 (coefficient of determination) of predictions `y_pred` against `y_true`. Assign it to `result`.",
-    "starterCode": "import numpy as np\ny_true = np.array([1.0, 2.0, 3.0, 4.0])\ny_pred = np.array([1.0, 2.0, 3.0, 4.0])\n# Assign to `result` the R^2 score\nresult = ...",
-    "check": "assert abs(result - 1.0) < 1e-9",
+    "prompt": "Compute the R^2 (coefficient of determination) of predictions `y_pred` against `y_true`. Assign it to `result`. (The predictions are close but not perfect, so R^2 is just under 1.)",
+    "starterCode": "import numpy as np\ny_true = np.array([1.0, 2.0, 3.0, 4.0])\ny_pred = np.array([1.0, 2.1, 2.9, 4.2])\n# Assign to `result` the R^2 score\nresult = ...",
+    "check": "assert abs(result - 0.988) < 1e-9",
     "hint": "R^2 = 1 - SS_res/SS_tot, where SS_res = sum((y_true - y_pred)^2) and SS_tot = sum((y_true - mean(y_true))^2).",
-    "solution": "import numpy as np\ny_true = np.array([1.0, 2.0, 3.0, 4.0])\ny_pred = np.array([1.0, 2.0, 3.0, 4.0])\nss_res = np.sum((y_true - y_pred)**2)\nss_tot = np.sum((y_true - y_true.mean())**2)\nresult = float(1 - ss_res / ss_tot)",
+    "solution": "import numpy as np\ny_true = np.array([1.0, 2.0, 3.0, 4.0])\ny_pred = np.array([1.0, 2.1, 2.9, 4.2])\nss_res = np.sum((y_true - y_pred)**2)\nss_tot = np.sum((y_true - y_true.mean())**2)\nresult = float(1 - ss_res / ss_tot)",
     "difficulty": "hard"
   }
 ]
