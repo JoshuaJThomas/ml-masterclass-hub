@@ -2,27 +2,35 @@
   import { onMount } from 'svelte';
   import CodeEditor from '../components/CodeEditor.svelte';
   import { loadBank } from '../bank/loadBank.js';
-  import { selectDaily } from '../bank/selectDaily.js';
+  import { buildDailySet } from '../srs/dailySet.js';
+  import { newCard, grade, ratingFor } from '../srs/scheduler.js';
+  import { loadProgress, recordReview } from '../srs/progress.js';
   import { getPyodide, runCode } from '../runner/pyodideRunner.js';
 
   let loading = $state(true);
   let loadError = $state('');
   let exercises = $state([]);
+  let counts = $state({ due: 0, fresh: 0 });
   let index = $state(0);
   let code = $state('');
   let showHint = $state(false);
   let showSolution = $state(false);
+  let usedHelp = $state(false);
+  let graded = $state(new Set());
   let status = $state('');
   let running = $state(false);
-  let result = $state(null); // { passed, stdout, error }
+  let result = $state(null);
 
-  const today = () => new Date().toISOString().slice(0, 10);
+  const today = () => new Date();
   const current = $derived(exercises[index]);
 
   onMount(async () => {
     try {
       const { meta, questions } = await loadBank(import.meta.env.BASE_URL);
-      exercises = selectDaily(questions, meta.completedThrough, today(), 5);
+      const progress = loadProgress();
+      const set = buildDailySet(questions, meta.completedThrough, progress, today(), 5);
+      exercises = set.all;
+      counts = { due: set.due.length, fresh: set.fresh.length };
       if (exercises.length) resetForCurrent();
     } catch (e) {
       loadError = String(e.message || e);
@@ -33,7 +41,7 @@
 
   function resetForCurrent() {
     code = current?.starterCode ?? '';
-    showHint = false; showSolution = false; result = null;
+    showHint = false; showSolution = false; usedHelp = false; result = null;
   }
 
   function go(delta) {
@@ -41,11 +49,32 @@
     resetForCurrent();
   }
 
+  // Grade an exercise once (first terminal outcome) and persist the updated card.
+  function gradeOnce(passed) {
+    if (!current || graded.has(current.id)) return;
+    graded.add(current.id);
+    const progress = loadProgress();
+    const card = progress[current.id] ?? newCard();
+    const next = grade(card, ratingFor({ passed, usedHelp }), new Date());
+    recordReview(current.id, next);
+  }
+
+  function revealSolution() {
+    showSolution = !showSolution;
+    if (showSolution) { usedHelp = true; gradeOnce(false); }
+  }
+
+  function toggleHint() {
+    showHint = !showHint;
+    if (showHint) usedHelp = true;
+  }
+
   async function run() {
     running = true; result = null;
     try {
       const pyodide = await getPyodide((s) => (status = s));
       result = await runCode(pyodide, code, current.check);
+      if (result.passed) gradeOnce(true);
     } catch (e) {
       result = { passed: false, stdout: '', error: String(e.message || e) };
     } finally {
@@ -61,12 +90,12 @@
     <p class="mono-label" style="color: var(--color-error)">COULD NOT LOAD EXERCISES</p>
     <p class="body-large">{loadError}</p>
   {:else if !exercises.length}
-    <p class="mono-label">NO EXERCISES YET</p>
-    <p class="body-large">Add notebooks and generate the bank to start practicing.</p>
+    <p class="mono-label">ALL CAUGHT UP</p>
+    <p class="body-large" style="max-width: 640px;">Nothing is due right now and there are no new exercises in your completed chapters. Come back later, or finish another chapter to unlock more.</p>
   {:else}
     <div class="head">
       <p class="mono-label" style="color: var(--color-deep-green)">
-        TODAY · {index + 1} / {exercises.length} · CH {String(current.chapter).padStart(2, '0')} · {current.difficulty}
+        TODAY · {index + 1}/{exercises.length} · {counts.due} DUE · {counts.fresh} NEW
       </p>
       <div class="nav">
         <button class="btn-secondary" onclick={() => go(-1)} disabled={index === 0}>Prev</button>
@@ -74,6 +103,7 @@
       </div>
     </div>
 
+    <p class="mono-label" style="color: var(--color-muted)">CH {String(current.chapter).padStart(2, '0')} · {current.difficulty}</p>
     <h1 class="heading-feature">{current.topic}</h1>
     <p class="body-large" style="color: var(--color-body-muted); max-width: 720px;">{current.prompt}</p>
 
@@ -81,12 +111,11 @@
 
     <div class="actions">
       <button class="btn-primary" onclick={run} disabled={running}>{running ? 'Running…' : 'Run'}</button>
-      <button class="btn-secondary" onclick={() => (showHint = !showHint)}>{showHint ? 'Hide hint' : 'Show hint'}</button>
-      <button class="btn-secondary" onclick={() => (showSolution = !showSolution)}>{showSolution ? 'Hide solution' : 'Reveal solution'}</button>
+      <button class="btn-secondary" onclick={toggleHint}>{showHint ? 'Hide hint' : 'Show hint'}</button>
+      <button class="btn-secondary" onclick={revealSolution}>{showSolution ? 'Hide solution' : 'Reveal solution'}</button>
     </div>
 
     {#if status}<p class="micro">{status}</p>{/if}
-
     {#if showHint}<p class="hint">💡 {current.hint}</p>{/if}
 
     {#if result}
@@ -118,5 +147,5 @@
   .result pre, .solution pre { font-family: var(--font-mono); font-size: 13px; white-space: pre-wrap; margin: var(--space-sm) 0 0; }
   .result .stdout { color: var(--color-body-muted); }
   .solution { margin-top: var(--space-lg); border-top: 1px solid var(--color-hairline); padding-top: var(--space-lg); }
-  h1 { margin: var(--space-lg) 0 var(--space-sm); }
+  h1 { margin: var(--space-sm) 0 var(--space-sm); }
 </style>
