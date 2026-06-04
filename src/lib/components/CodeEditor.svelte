@@ -1,32 +1,59 @@
 <script>
+  import { onMount, onDestroy } from 'svelte';
+  import { EditorView, basicSetup } from 'codemirror';
+  import { EditorState } from '@codemirror/state';
+  import { keymap } from '@codemirror/view';
+  import { indentWithTab } from '@codemirror/commands';
+  import { python } from '@codemirror/lang-python';
+  import { oneDark } from '@codemirror/theme-one-dark';
+
   let { value = $bindable('') } = $props();
-  function onKeydown(e) {
-    if (e.key === 'Tab') {
-      e.preventDefault();
-      const el = e.target;
-      const s = el.selectionStart, en = el.selectionEnd;
-      value = value.slice(0, s) + '    ' + value.slice(en);
-      queueMicrotask(() => { el.selectionStart = el.selectionEnd = s + 4; });
+  let host;
+  let view;
+  let applyingExternal = false;
+
+  const hostTheme = EditorView.theme({
+    '&': { borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-hairline)', fontSize: '14px' },
+    '.cm-content': { fontFamily: 'var(--font-mono)', minHeight: '200px' },
+    '.cm-scroller': { fontFamily: 'var(--font-mono)' },
+    '&.cm-focused': { outline: '2px solid var(--color-focus-blue)', outlineOffset: '1px' },
+  });
+
+  onMount(() => {
+    view = new EditorView({
+      parent: host,
+      state: EditorState.create({
+        doc: value,
+        extensions: [
+          basicSetup,
+          python(),
+          keymap.of([indentWithTab]),
+          oneDark,
+          hostTheme,
+          EditorView.updateListener.of((u) => {
+            if (u.docChanged && !applyingExternal) value = u.state.doc.toString();
+          }),
+        ],
+      }),
+    });
+  });
+
+  // Reflect external value changes (e.g. navigating to a new exercise's starterCode).
+  $effect(() => {
+    const v = value;
+    if (view && v !== view.state.doc.toString()) {
+      applyingExternal = true;
+      view.dispatch({ changes: { from: 0, to: view.state.doc.length, insert: v } });
+      applyingExternal = false;
     }
-  }
+  });
+
+  onDestroy(() => view?.destroy());
 </script>
 
-<textarea
-  class="editor"
-  bind:value
-  onkeydown={onKeydown}
-  spellcheck="false"
-  autocapitalize="off"
-  autocomplete="off"
-></textarea>
+<div class="editor-host" bind:this={host}></div>
 
 <style>
-  .editor {
-    width: 100%; min-height: 220px; resize: vertical;
-    font-family: var(--font-mono); font-size: 14px; line-height: 1.5;
-    color: var(--color-on-dark); background: var(--color-primary);
-    border: 1px solid var(--color-hairline); border-radius: var(--radius-sm);
-    padding: var(--space-lg); white-space: pre; overflow-wrap: normal; overflow-x: auto;
-  }
-  .editor:focus { outline: 2px solid var(--color-focus-blue); outline-offset: 1px; }
+  .editor-host { width: 100%; }
+  :global(.editor-host .cm-editor) { max-height: 60vh; }
 </style>
