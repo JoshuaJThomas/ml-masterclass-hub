@@ -5,6 +5,7 @@
   import { buildDailySet } from '../srs/dailySet.js';
   import { newCard, grade, ratingFor } from '../srs/scheduler.js';
   import { loadProgress, recordReview } from '../srs/progress.js';
+  import { logReview } from '../srs/activity.js';
   import { getPyodide, runCode } from '../runner/pyodideRunner.js';
 
   let loading = $state(true);
@@ -57,6 +58,7 @@
     const card = progress[current.id] ?? newCard();
     const next = grade(card, ratingFor({ passed, usedHelp }), new Date());
     recordReview(current.id, next);
+    logReview(new Date().toISOString().slice(0, 10));
   }
 
   function revealSolution() {
