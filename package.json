@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest run"
+    "validate-bank": "node scripts/validate-bank.js",
+    "test": "vitest run && npm run validate-bank"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^7.1.2",
