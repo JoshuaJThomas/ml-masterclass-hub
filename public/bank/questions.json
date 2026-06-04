@@ -1,1 +1,383 @@
-[]
+[
+  {
+    "id": "ch01-list-comprehension-01",
+    "chapter": 1,
+    "topic": "list comprehensions",
+    "prompt": "Using a list comprehension, assign to `result` a list of the squares of the EVEN numbers in `nums` (keep original order).",
+    "starterCode": "nums = [1, 2, 3, 4, 5, 6, 7, 8]\n# Assign to `result` the squares of the even numbers\nresult = ...",
+    "check": "assert result == [4, 16, 36, 64]",
+    "hint": "Filter with `if n % 2 == 0` inside the comprehension, and square with `n**2`.",
+    "solution": "nums = [1, 2, 3, 4, 5, 6, 7, 8]\nresult = [n**2 for n in nums if n % 2 == 0]",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch01-dict-wordcount-02",
+    "chapter": 1,
+    "topic": "dictionaries",
+    "prompt": "Count how many times each word appears in `words`. Assign to `result` a dict mapping each word to its count.",
+    "starterCode": "words = ['a', 'b', 'a', 'c', 'b', 'a']\n# Assign to `result` a dict of word -> count\nresult = ...",
+    "check": "assert result == {'a': 3, 'b': 2, 'c': 1}",
+    "hint": "Loop over the words and use `result[w] = result.get(w, 0) + 1`.",
+    "solution": "words = ['a', 'b', 'a', 'c', 'b', 'a']\nresult = {}\nfor w in words:\n    result[w] = result.get(w, 0) + 1",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch01-function-factorial-03",
+    "chapter": 1,
+    "topic": "functions",
+    "prompt": "Write a function `factorial(n)` that returns n! (with factorial(0) == 1). Then assign `result = factorial(5)`.",
+    "starterCode": "def factorial(n):\n    # your code here\n    ...\n\nresult = factorial(5)",
+    "check": "assert factorial(0) == 1\nassert result == 120",
+    "hint": "Multiply the numbers 1..n, or use recursion: n * factorial(n-1).",
+    "solution": "def factorial(n):\n    total = 1\n    for i in range(2, n + 1):\n        total *= i\n    return total\n\nresult = factorial(5)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch01-string-vowels-04",
+    "chapter": 1,
+    "topic": "strings",
+    "prompt": "Assign to `result` the number of vowels (a, e, i, o, u) in the lowercase string `text`.",
+    "starterCode": "text = 'machine learning'\n# Assign to `result` the count of vowels\nresult = ...",
+    "check": "assert result == 6",
+    "hint": "Loop over characters and check membership in the string 'aeiou'.",
+    "solution": "text = 'machine learning'\nresult = sum(1 for ch in text if ch in 'aeiou')",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch01-slicing-reverse-05",
+    "chapter": 1,
+    "topic": "slicing",
+    "prompt": "Using slicing, assign to `result` the list `nums` reversed.",
+    "starterCode": "nums = [10, 20, 30, 40, 50]\n# Assign to `result` the reversed list using slicing\nresult = ...",
+    "check": "assert result == [50, 40, 30, 20, 10]",
+    "hint": "A slice step of -1 reverses a sequence: `nums[::-1]`.",
+    "solution": "nums = [10, 20, 30, 40, 50]\nresult = nums[::-1]",
+    "difficulty": "easy"
+  },
+
+  {
+    "id": "ch02-arange-reshape-01",
+    "chapter": 2,
+    "topic": "array creation",
+    "prompt": "Using NumPy, assign to `result` a 3x4 array containing the numbers 0 through 11 (row-major order).",
+    "starterCode": "import numpy as np\n# Assign to `result` a 3x4 array of 0..11\nresult = ...",
+    "check": "assert result.shape == (3, 4)\nassert result.tolist() == [[0,1,2,3],[4,5,6,7],[8,9,10,11]]",
+    "hint": "Create with `np.arange(12)` and then `.reshape(3, 4)`.",
+    "solution": "import numpy as np\nresult = np.arange(12).reshape(3, 4)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch02-boolean-mask-02",
+    "chapter": 2,
+    "topic": "boolean masking",
+    "prompt": "Assign to `result` a 1-D array containing only the elements of `arr` that are greater than 6.",
+    "starterCode": "import numpy as np\narr = np.array([4, 9, 2, 7, 11, 5, 8])\n# Assign to `result` the elements > 6\nresult = ...",
+    "check": "assert result.tolist() == [9, 7, 11, 8]",
+    "hint": "Index the array with a boolean condition: `arr[arr > 6]`.",
+    "solution": "import numpy as np\narr = np.array([4, 9, 2, 7, 11, 5, 8])\nresult = arr[arr > 6]",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch02-axis-sum-03",
+    "chapter": 2,
+    "topic": "axis aggregation",
+    "prompt": "Given the 2-D array `mat`, assign to `result` a 1-D array of the column sums (sum down each column).",
+    "starterCode": "import numpy as np\nmat = np.array([[1, 2, 3], [4, 5, 6]])\n# Assign to `result` the column sums\nresult = ...",
+    "check": "assert result.tolist() == [5, 7, 9]",
+    "hint": "Summing down columns means collapsing the rows: `mat.sum(axis=0)`.",
+    "solution": "import numpy as np\nmat = np.array([[1, 2, 3], [4, 5, 6]])\nresult = mat.sum(axis=0)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch02-broadcasting-normalize-04",
+    "chapter": 2,
+    "topic": "broadcasting",
+    "prompt": "Min-max normalize `arr` to the range [0, 1]. Assign the resulting array to `result`.",
+    "starterCode": "import numpy as np\narr = np.array([10.0, 20.0, 30.0, 40.0, 50.0])\n# Assign to `result` the array scaled to [0, 1]\nresult = ...",
+    "check": "import numpy as np\nassert np.allclose(result, [0.0, 0.25, 0.5, 0.75, 1.0])",
+    "hint": "Subtract the min, then divide by (max - min). Operations broadcast over the array.",
+    "solution": "import numpy as np\narr = np.array([10.0, 20.0, 30.0, 40.0, 50.0])\nresult = (arr - arr.min()) / (arr.max() - arr.min())",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch02-where-clip-05",
+    "chapter": 2,
+    "topic": "np.where",
+    "prompt": "Using `np.where`, assign to `result` an array that replaces every negative value in `arr` with 0 and keeps the rest.",
+    "starterCode": "import numpy as np\narr = np.array([3, -1, 4, -5, 0, 2])\n# Assign to `result` with negatives replaced by 0\nresult = ...",
+    "check": "assert result.tolist() == [3, 0, 4, 0, 0, 2]",
+    "hint": "`np.where(condition, value_if_true, value_if_false)` — here condition is `arr < 0`.",
+    "solution": "import numpy as np\narr = np.array([3, -1, 4, -5, 0, 2])\nresult = np.where(arr < 0, 0, arr)",
+    "difficulty": "medium"
+  },
+
+  {
+    "id": "ch03-select-column-01",
+    "chapter": 3,
+    "topic": "DataFrame selection",
+    "prompt": "Assign to `result` the 'age' column of `df` as a pandas Series.",
+    "starterCode": "import pandas as pd\ndf = pd.DataFrame({'name': ['Al', 'Bo', 'Cy'], 'age': [25, 30, 35]})\n# Assign to `result` the age column\nresult = ...",
+    "check": "assert list(result) == [25, 30, 35]",
+    "hint": "Select a single column with `df['age']`.",
+    "solution": "import pandas as pd\ndf = pd.DataFrame({'name': ['Al', 'Bo', 'Cy'], 'age': [25, 30, 35]})\nresult = df['age']",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch03-groupby-mean-02",
+    "chapter": 3,
+    "topic": "groupby",
+    "prompt": "Assign to `result` a Series of the average `points` per `team` (index = team name).",
+    "starterCode": "import pandas as pd\ndf = pd.DataFrame({'team': ['A','B','A','B','A'], 'points': [10, 20, 11, 18, 12]})\n# Assign to `result` the mean points per team\nresult = ...",
+    "check": "assert round(float(result['A']), 2) == 11.0\nassert round(float(result['B']), 2) == 19.0",
+    "hint": "Group by 'team', select 'points', then call `.mean()`.",
+    "solution": "import pandas as pd\ndf = pd.DataFrame({'team': ['A','B','A','B','A'], 'points': [10, 20, 11, 18, 12]})\nresult = df.groupby('team')['points'].mean()",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch03-filter-rows-03",
+    "chapter": 3,
+    "topic": "boolean filtering",
+    "prompt": "Assign to `result` the rows of `df` where `score` is at least 60, keeping all columns.",
+    "starterCode": "import pandas as pd\ndf = pd.DataFrame({'name': ['Al','Bo','Cy','Di'], 'score': [55, 72, 60, 40]})\n# Assign to `result` the rows with score >= 60\nresult = ...",
+    "check": "assert list(result['name']) == ['Bo', 'Cy']",
+    "hint": "Index the DataFrame with a boolean mask: `df[df['score'] >= 60]`.",
+    "solution": "import pandas as pd\ndf = pd.DataFrame({'name': ['Al','Bo','Cy','Di'], 'score': [55, 72, 60, 40]})\nresult = df[df['score'] >= 60]",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch03-fillna-mean-04",
+    "chapter": 3,
+    "topic": "missing data",
+    "prompt": "Fill the missing values in the 'price' column of `df` with that column's mean. Assign the filled Series to `result`.",
+    "starterCode": "import pandas as pd\nimport numpy as np\ndf = pd.DataFrame({'price': [10.0, np.nan, 20.0, 30.0, np.nan]})\n# Assign to `result` the price column with NaNs filled by the mean\nresult = ...",
+    "check": "assert list(result) == [10.0, 20.0, 20.0, 30.0, 20.0]",
+    "hint": "Compute `df['price'].mean()` (NaNs are ignored) and pass it to `.fillna(...)`.",
+    "solution": "import pandas as pd\nimport numpy as np\ndf = pd.DataFrame({'price': [10.0, np.nan, 20.0, 30.0, np.nan]})\nresult = df['price'].fillna(df['price'].mean())",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch03-apply-newcolumn-05",
+    "chapter": 3,
+    "topic": "apply / new columns",
+    "prompt": "Add a new column 'category' to `df` that is 'pass' when `score >= 60` else 'fail'. Assign the modified DataFrame to `result`.",
+    "starterCode": "import pandas as pd\ndf = pd.DataFrame({'name': ['Al','Bo','Cy'], 'score': [55, 72, 60]})\n# Add a 'category' column, then assign the DataFrame to `result`\nresult = ...",
+    "check": "assert list(result['category']) == ['fail', 'pass', 'pass']",
+    "hint": "Use `df['score'].apply(lambda s: 'pass' if s >= 60 else 'fail')` and assign it to `df['category']`.",
+    "solution": "import pandas as pd\ndf = pd.DataFrame({'name': ['Al','Bo','Cy'], 'score': [55, 72, 60]})\ndf['category'] = df['score'].apply(lambda s: 'pass' if s >= 60 else 'fail')\nresult = df",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch03-merge-join-06",
+    "chapter": 3,
+    "topic": "merge",
+    "prompt": "Merge `orders` and `customers` on 'cust_id' (inner join) and assign the result to `result`.",
+    "starterCode": "import pandas as pd\norders = pd.DataFrame({'cust_id': [1, 2, 1], 'amount': [100, 200, 50]})\ncustomers = pd.DataFrame({'cust_id': [1, 2], 'name': ['Al', 'Bo']})\n# Assign to `result` the inner merge on cust_id\nresult = ...",
+    "check": "assert sorted(result['name']) == ['Al', 'Al', 'Bo']\nassert len(result) == 3",
+    "hint": "Use `pd.merge(orders, customers, on='cust_id')` (inner join is the default).",
+    "solution": "import pandas as pd\norders = pd.DataFrame({'cust_id': [1, 2, 1], 'amount': [100, 200, 50]})\ncustomers = pd.DataFrame({'cust_id': [1, 2], 'name': ['Al', 'Bo']})\nresult = pd.merge(orders, customers, on='cust_id')",
+    "difficulty": "hard"
+  },
+
+  {
+    "id": "ch04-line-title-01",
+    "chapter": 4,
+    "topic": "line plots",
+    "prompt": "Create a figure and axes, plot `y` against `x` as a line, and set the title to 'Squares'. Assign the Axes object to `ax`.",
+    "starterCode": "import matplotlib\nmatplotlib.use('Agg')\nimport matplotlib.pyplot as plt\nx = [0, 1, 2, 3, 4]\ny = [0, 1, 4, 9, 16]\nfig, ax = plt.subplots()\n# plot y vs x on ax and set the title to 'Squares'\n...",
+    "check": "assert ax.get_title() == 'Squares'\nassert list(ax.lines[0].get_ydata()) == [0, 1, 4, 9, 16]",
+    "hint": "Call `ax.plot(x, y)` then `ax.set_title('Squares')`.",
+    "solution": "import matplotlib\nmatplotlib.use('Agg')\nimport matplotlib.pyplot as plt\nx = [0, 1, 2, 3, 4]\ny = [0, 1, 4, 9, 16]\nfig, ax = plt.subplots()\nax.plot(x, y)\nax.set_title('Squares')",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch04-axis-labels-02",
+    "chapter": 4,
+    "topic": "axis labels",
+    "prompt": "On the given axes `ax`, set the x-axis label to 'time' and the y-axis label to 'value'.",
+    "starterCode": "import matplotlib\nmatplotlib.use('Agg')\nimport matplotlib.pyplot as plt\nfig, ax = plt.subplots()\nax.plot([1, 2, 3], [4, 5, 6])\n# set the x and y axis labels\n...",
+    "check": "assert ax.get_xlabel() == 'time'\nassert ax.get_ylabel() == 'value'",
+    "hint": "Use `ax.set_xlabel(...)` and `ax.set_ylabel(...)`.",
+    "solution": "import matplotlib\nmatplotlib.use('Agg')\nimport matplotlib.pyplot as plt\nfig, ax = plt.subplots()\nax.plot([1, 2, 3], [4, 5, 6])\nax.set_xlabel('time')\nax.set_ylabel('value')",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch04-bar-heights-03",
+    "chapter": 4,
+    "topic": "bar charts",
+    "prompt": "Create a bar chart of `values` for the `labels` on axes `ax`. The bars must have heights equal to `values`.",
+    "starterCode": "import matplotlib\nmatplotlib.use('Agg')\nimport matplotlib.pyplot as plt\nlabels = ['a', 'b', 'c']\nvalues = [3, 7, 5]\nfig, ax = plt.subplots()\n# draw a bar chart of values vs labels on ax\n...",
+    "check": "heights = [round(p.get_height()) for p in ax.patches]\nassert heights == [3, 7, 5]",
+    "hint": "Use `ax.bar(labels, values)`.",
+    "solution": "import matplotlib\nmatplotlib.use('Agg')\nimport matplotlib.pyplot as plt\nlabels = ['a', 'b', 'c']\nvalues = [3, 7, 5]\nfig, ax = plt.subplots()\nax.bar(labels, values)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch04-subplots-count-04",
+    "chapter": 4,
+    "topic": "subplots",
+    "prompt": "Create a figure with a 1-row, 2-column grid of subplots. Assign the figure to `fig` and the array of axes to `axes`.",
+    "starterCode": "import matplotlib\nmatplotlib.use('Agg')\nimport matplotlib.pyplot as plt\n# create a 1x2 grid of subplots\nfig, axes = ...",
+    "check": "assert len(axes) == 2\nassert fig is not None",
+    "hint": "`plt.subplots(1, 2)` returns `(fig, axes)` where axes has length 2.",
+    "solution": "import matplotlib\nmatplotlib.use('Agg')\nimport matplotlib.pyplot as plt\nfig, axes = plt.subplots(1, 2)",
+    "difficulty": "medium"
+  },
+
+  {
+    "id": "ch05-corr-matrix-01",
+    "chapter": 5,
+    "topic": "correlation (heatmap data)",
+    "prompt": "A Seaborn heatmap visualizes a correlation matrix. Compute the correlation matrix of `df`'s numeric columns and assign it to `result`.",
+    "starterCode": "import pandas as pd\ndf = pd.DataFrame({'x': [1, 2, 3, 4], 'y': [2, 4, 6, 8], 'z': [4, 3, 2, 1]})\n# Assign to `result` the correlation matrix\nresult = ...",
+    "check": "assert round(float(result.loc['x', 'y']), 5) == 1.0\nassert round(float(result.loc['x', 'z']), 5) == -1.0",
+    "hint": "`df.corr()` returns the pairwise correlation matrix.",
+    "solution": "import pandas as pd\ndf = pd.DataFrame({'x': [1, 2, 3, 4], 'y': [2, 4, 6, 8], 'z': [4, 3, 2, 1]})\nresult = df.corr()",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch05-pivot-heatmap-02",
+    "chapter": 5,
+    "topic": "pivot tables (heatmap data)",
+    "prompt": "Reshape `df` into a grid suitable for a heatmap: rows = 'day', columns = 'hour', values = 'count'. Assign the pivoted DataFrame to `result`.",
+    "starterCode": "import pandas as pd\ndf = pd.DataFrame({'day': ['Mon','Mon','Tue','Tue'], 'hour': [9, 10, 9, 10], 'count': [5, 8, 3, 6]})\n# Assign to `result` the pivoted table\nresult = ...",
+    "check": "assert int(result.loc['Mon', 10]) == 8\nassert int(result.loc['Tue', 9]) == 3",
+    "hint": "Use `df.pivot(index='day', columns='hour', values='count')`.",
+    "solution": "import pandas as pd\ndf = pd.DataFrame({'day': ['Mon','Mon','Tue','Tue'], 'hour': [9, 10, 9, 10], 'count': [5, 8, 3, 6]})\nresult = df.pivot(index='day', columns='hour', values='count')",
+    "difficulty": "hard"
+  },
+  {
+    "id": "ch05-groupby-barplot-03",
+    "chapter": 5,
+    "topic": "aggregation (barplot data)",
+    "prompt": "A Seaborn barplot shows a mean per category. Assign to `result` a Series of the mean `tip` per `day` (index = day name).",
+    "starterCode": "import pandas as pd\ndf = pd.DataFrame({'day': ['Fri','Mon','Fri','Mon'], 'tip': [2.0, 4.0, 4.0, 6.0]})\n# Assign to `result` the mean tip per day\nresult = ...",
+    "check": "assert round(float(result['Fri']), 2) == 3.0\nassert round(float(result['Mon']), 2) == 5.0",
+    "hint": "`df.groupby('day')['tip'].mean()` gives the mean per day.",
+    "solution": "import pandas as pd\ndf = pd.DataFrame({'day': ['Fri','Mon','Fri','Mon'], 'tip': [2.0, 4.0, 4.0, 6.0]})\nresult = df.groupby('day')['tip'].mean()",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch05-value-counts-04",
+    "chapter": 5,
+    "topic": "counts (countplot data)",
+    "prompt": "A Seaborn countplot shows how many times each category appears. Assign to `result` a Series of the counts of each value in the 'color' column, so that `result['red']` gives the number of reds.",
+    "starterCode": "import pandas as pd\ndf = pd.DataFrame({'color': ['red','blue','red','red','blue']})\n# Assign to `result` the count of each color\nresult = ...",
+    "check": "assert int(result['red']) == 3\nassert int(result['blue']) == 2",
+    "hint": "`df['color'].value_counts()` returns counts indexed by category.",
+    "solution": "import pandas as pd\ndf = pd.DataFrame({'color': ['red','blue','red','red','blue']})\nresult = df['color'].value_counts()",
+    "difficulty": "easy"
+  },
+
+  {
+    "id": "ch06-filter-aggregate-01",
+    "chapter": 6,
+    "topic": "data analysis",
+    "prompt": "From the sales `df`, assign to `result` the total `revenue` generated by the 'North' region only (as an int).",
+    "starterCode": "import pandas as pd\ndf = pd.DataFrame({'region': ['North','South','North','East'], 'revenue': [100, 200, 150, 300]})\n# Assign to `result` the total North revenue\nresult = ...",
+    "check": "assert int(result) == 250",
+    "hint": "Filter rows where region == 'North', select 'revenue', then `.sum()`.",
+    "solution": "import pandas as pd\ndf = pd.DataFrame({'region': ['North','South','North','East'], 'revenue': [100, 200, 150, 300]})\nresult = int(df[df['region'] == 'North']['revenue'].sum())",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch06-top-group-02",
+    "chapter": 6,
+    "topic": "data analysis",
+    "prompt": "Find which product has the highest total `units` sold. Assign that product's name (a string) to `result`.",
+    "starterCode": "import pandas as pd\ndf = pd.DataFrame({'product': ['A','B','A','C','B','B'], 'units': [5, 3, 4, 9, 2, 6]})\n# Assign to `result` the product with the most total units\nresult = ...",
+    "check": "assert result == 'B'",
+    "hint": "Group by 'product', sum 'units', then use `.idxmax()` to get the index of the largest total.",
+    "solution": "import pandas as pd\ndf = pd.DataFrame({'product': ['A','B','A','C','B','B'], 'units': [5, 3, 4, 9, 2, 6]})\nresult = df.groupby('product')['units'].sum().idxmax()",
+    "difficulty": "hard"
+  },
+  {
+    "id": "ch06-sort-head-03",
+    "chapter": 6,
+    "topic": "data analysis",
+    "prompt": "Assign to `result` a list of the names of the top 2 highest-scoring people in `df`, highest first.",
+    "starterCode": "import pandas as pd\ndf = pd.DataFrame({'name': ['Al','Bo','Cy','Di'], 'score': [80, 95, 70, 88]})\n# Assign to `result` the names of the top 2 scorers\nresult = ...",
+    "check": "assert result == ['Bo', 'Di']",
+    "hint": "Sort by 'score' descending, take the first 2 rows, then get the 'name' column as a list.",
+    "solution": "import pandas as pd\ndf = pd.DataFrame({'name': ['Al','Bo','Cy','Di'], 'score': [80, 95, 70, 88]})\nresult = list(df.sort_values('score', ascending=False).head(2)['name'])",
+    "difficulty": "medium"
+  },
+
+  {
+    "id": "ch07-train-test-split-01",
+    "chapter": 7,
+    "topic": "train/test split",
+    "prompt": "A train/test split holds out part of the data. Given 10 samples and a test size of 30%, assign to `result` the number of TEST samples (as an int).",
+    "starterCode": "n_samples = 10\ntest_fraction = 0.3\n# Assign to `result` the number of test samples\nresult = ...",
+    "check": "assert result == 3",
+    "hint": "Multiply n_samples by test_fraction and convert to an int.",
+    "solution": "n_samples = 10\ntest_fraction = 0.3\nresult = int(n_samples * test_fraction)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch07-accuracy-02",
+    "chapter": 7,
+    "topic": "classification metrics",
+    "prompt": "Compute classification accuracy: the fraction of predictions in `y_pred` that match `y_true`. Assign it to `result`.",
+    "starterCode": "import numpy as np\ny_true = np.array([1, 0, 1, 1, 0])\ny_pred = np.array([1, 0, 0, 1, 0])\n# Assign to `result` the accuracy (0..1)\nresult = ...",
+    "check": "assert abs(result - 0.8) < 1e-9",
+    "hint": "Accuracy = (number of matches) / (total). `(y_true == y_pred).mean()` works.",
+    "solution": "import numpy as np\ny_true = np.array([1, 0, 1, 1, 0])\ny_pred = np.array([1, 0, 0, 1, 0])\nresult = float((y_true == y_pred).mean())",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch07-confusion-counts-03",
+    "chapter": 7,
+    "topic": "confusion matrix",
+    "prompt": "For binary labels, assign to `result` the number of TRUE POSITIVES: cases where `y_true == 1` AND `y_pred == 1` (as an int).",
+    "starterCode": "import numpy as np\ny_true = np.array([1, 0, 1, 1, 0, 1])\ny_pred = np.array([1, 1, 0, 1, 0, 1])\n# Assign to `result` the count of true positives\nresult = ...",
+    "check": "assert int(result) == 3",
+    "hint": "A true positive is where both arrays equal 1: `((y_true == 1) & (y_pred == 1)).sum()`.",
+    "solution": "import numpy as np\ny_true = np.array([1, 0, 1, 1, 0, 1])\ny_pred = np.array([1, 1, 0, 1, 0, 1])\nresult = int(((y_true == 1) & (y_pred == 1)).sum())",
+    "difficulty": "hard"
+  },
+
+  {
+    "id": "ch08-mae-01",
+    "chapter": 8,
+    "topic": "regression metrics",
+    "prompt": "Compute the Mean Absolute Error (MAE) between `y_true` and `y_pred`. Assign it to `result`.",
+    "starterCode": "import numpy as np\ny_true = np.array([3.0, 5.0, 2.5, 7.0])\ny_pred = np.array([2.5, 5.5, 2.0, 6.5])\n# Assign to `result` the MAE\nresult = ...",
+    "check": "assert abs(result - 0.5) < 1e-9",
+    "hint": "MAE is the mean of the absolute differences: `np.mean(np.abs(y_true - y_pred))`.",
+    "solution": "import numpy as np\ny_true = np.array([3.0, 5.0, 2.5, 7.0])\ny_pred = np.array([2.5, 5.5, 2.0, 6.5])\nresult = float(np.mean(np.abs(y_true - y_pred)))",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch08-rmse-02",
+    "chapter": 8,
+    "topic": "regression metrics",
+    "prompt": "Compute the Root Mean Squared Error (RMSE) between `y_true` and `y_pred`. Assign it to `result`.",
+    "starterCode": "import numpy as np\ny_true = np.array([3.0, 5.0, 2.5, 7.0])\ny_pred = np.array([2.5, 5.5, 2.0, 6.5])\n# Assign to `result` the RMSE\nresult = ...",
+    "check": "assert abs(result - 0.5) < 1e-9",
+    "hint": "RMSE = sqrt(mean of squared errors): `np.sqrt(np.mean((y_true - y_pred)**2))`.",
+    "solution": "import numpy as np\ny_true = np.array([3.0, 5.0, 2.5, 7.0])\ny_pred = np.array([2.5, 5.5, 2.0, 6.5])\nresult = float(np.sqrt(np.mean((y_true - y_pred)**2)))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch08-polyfit-slope-03",
+    "chapter": 8,
+    "topic": "fitting a line",
+    "prompt": "Fit a straight line (degree 1) to the points (`x`, `y`) and assign the SLOPE of the best-fit line to `result`.",
+    "starterCode": "import numpy as np\nx = np.array([0.0, 1.0, 2.0, 3.0])\ny = np.array([1.0, 3.0, 5.0, 7.0])\n# Assign to `result` the slope of the best-fit line\nresult = ...",
+    "check": "assert abs(result - 2.0) < 1e-6",
+    "hint": "`np.polyfit(x, y, 1)` returns `[slope, intercept]`. Take the first element.",
+    "solution": "import numpy as np\nx = np.array([0.0, 1.0, 2.0, 3.0])\ny = np.array([1.0, 3.0, 5.0, 7.0])\nresult = float(np.polyfit(x, y, 1)[0])",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch08-r2-score-04",
+    "chapter": 8,
+    "topic": "R-squared",
+    "prompt": "Compute the R^2 (coefficient of determination) of predictions `y_pred` against `y_true`. Assign it to `result`.",
+    "starterCode": "import numpy as np\ny_true = np.array([1.0, 2.0, 3.0, 4.0])\ny_pred = np.array([1.0, 2.0, 3.0, 4.0])\n# Assign to `result` the R^2 score\nresult = ...",
+    "check": "assert abs(result - 1.0) < 1e-9",
+    "hint": "R^2 = 1 - SS_res/SS_tot, where SS_res = sum((y_true - y_pred)^2) and SS_tot = sum((y_true - mean(y_true))^2).",
+    "solution": "import numpy as np\ny_true = np.array([1.0, 2.0, 3.0, 4.0])\ny_pred = np.array([1.0, 2.0, 3.0, 4.0])\nss_res = np.sum((y_true - y_pred)**2)\nss_tot = np.sum((y_true - y_true.mean())**2)\nresult = float(1 - ss_res / ss_tot)",
+    "difficulty": "hard"
+  }
+]
