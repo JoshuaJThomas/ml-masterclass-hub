@@ -8,5 +8,5 @@ const styleEl = document.createElement('style');
 styleEl.textContent = cssVars();
 document.head.appendChild(styleEl);
 
-const app = mount(App, { target: document.getElementById('app') });
+const app = mount(App, { target: document.getElementById('app') ?? document.body });
 export default app;
