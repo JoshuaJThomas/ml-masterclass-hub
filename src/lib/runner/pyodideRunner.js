@@ -50,14 +50,21 @@ export async function runCode(pyodide, userCode, checkCode) {
     '    sys.stdout = _old',
     '_buf.getvalue()',
   ].join('\n');
+  // Fresh namespace per run so no variable (e.g. `result`) leaks between exercises.
+  const ns = pyodide.toPy({});
   try {
-    const stdout = await pyodide.runPythonAsync(program);
+    const stdout = await pyodide.runPythonAsync(program, { globals: ns });
     return shapeResult(stdout ?? '', null);
   } catch (error) {
     // Recover any stdout printed before the error, if available.
     let stdout = '';
-    try { stdout = pyodide.globals.get('_buf')?.getvalue() ?? ''; } catch { /* ignore */ }
+    try {
+      const buf = ns.get('_buf');
+      if (buf) { stdout = buf.getvalue() ?? ''; buf.destroy?.(); }
+    } catch { /* ignore */ }
     return shapeResult(stdout, error);
+  } finally {
+    ns.destroy?.();
   }
 }
 
