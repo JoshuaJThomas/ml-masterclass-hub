@@ -2,6 +2,7 @@
   import Header from './lib/components/Header.svelte';
   import Practice from './lib/views/Practice.svelte';
   import Progress from './lib/views/Progress.svelte';
+  import Sql from './lib/views/Sql.svelte';
   import { view } from './lib/stores/view.js';
 </script>
 
@@ -9,6 +10,8 @@
 <main>
   {#if $view === 'practice'}
     <Practice />
+  {:else if $view === 'sql'}
+    <Sql />
   {:else}
     <Progress />
   {/if}

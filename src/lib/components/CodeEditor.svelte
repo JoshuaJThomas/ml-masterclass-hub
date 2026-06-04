@@ -5,9 +5,10 @@
   import { keymap } from '@codemirror/view';
   import { indentWithTab } from '@codemirror/commands';
   import { python } from '@codemirror/lang-python';
+  import { sql } from '@codemirror/lang-sql';
   import { oneDark } from '@codemirror/theme-one-dark';
 
-  let { value = $bindable('') } = $props();
+  let { value = $bindable(''), lang = 'python' } = $props();
   let host;
   let view;
   let applyingExternal = false;
@@ -26,7 +27,7 @@
         doc: value,
         extensions: [
           basicSetup,
-          python(),
+          (lang === 'sql' ? sql() : python()),
           keymap.of([indentWithTab]),
           oneDark,
           hostTheme,
