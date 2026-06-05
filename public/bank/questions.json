@@ -1087,5 +1087,38 @@
     "hint": "Compute the Euclidean distance for all 4 cross-pairs (each point in `a` paired with each point in `b`) and take the mean.",
     "solution": "import numpy as np\na = np.array([[0.0, 0.0], [1.0, 0.0]])\nb = np.array([[5.0, 0.0], [3.0, 0.0]])\nresult = float(np.mean([np.linalg.norm(pa - pb) for pa in a for pb in b]))",
     "difficulty": "medium"
+  },
+  {
+    "id": "ch04-histogram-06",
+    "chapter": 4,
+    "topic": "histograms",
+    "prompt": "Draw a histogram of `data` with 4 bins on axes `ax`. (Use the Agg backend — it's already set.)",
+    "starterCode": "import matplotlib\nmatplotlib.use('Agg')\nimport matplotlib.pyplot as plt\ndata = [1, 1, 2, 3, 3, 3, 4]\nfig, ax = plt.subplots()\n# Draw a histogram of data with 4 bins on ax\n...",
+    "check": "assert len(ax.patches) == 4\nassert sum(int(p.get_height()) for p in ax.patches) == 7",
+    "hint": "Use `ax.hist(data, bins=4)` to plot the histogram.",
+    "solution": "import matplotlib\nmatplotlib.use('Agg')\nimport matplotlib.pyplot as plt\ndata = [1, 1, 2, 3, 3, 3, 4]\nfig, ax = plt.subplots()\nax.hist(data, bins=4)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch09-log-transform-05",
+    "chapter": 9,
+    "topic": "log transformation",
+    "prompt": "Log-transforming skewed features is a common preprocessing step. Apply `np.log1p` (i.e., log(1 + x)) element-wise to `arr`. Assign the result to `result`.",
+    "starterCode": "import numpy as np\narr = np.array([0.0, 1.0, 3.0, 7.0, 99.0])\n# Assign to `result` the log1p of arr\nresult = ...",
+    "check": "import numpy as np\nassert abs(result[0] - 0.0) < 1e-9\nassert abs(result[1] - np.log(2.0)) < 1e-9\nassert abs(result[4] - np.log(100.0)) < 1e-9",
+    "hint": "`np.log1p(x)` computes log(1 + x) stably even when x is small.",
+    "solution": "import numpy as np\narr = np.array([0.0, 1.0, 3.0, 7.0, 99.0])\nresult = np.log1p(arr)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch19-scalar-projection-04",
+    "chapter": 19,
+    "topic": "scalar projection",
+    "prompt": "The scalar projection of vector `u` onto vector `v` is the signed length of `u` along the direction of `v`: dot(u, v) / ‖v‖. Compute it and assign to `result`.",
+    "starterCode": "import numpy as np\nu = np.array([4.0, 3.0])\nv = np.array([3.0, 4.0])\n# Assign to `result` the scalar projection of u onto v\nresult = ...",
+    "check": "assert abs(result - 4.8) < 1e-9",
+    "hint": "scalar_proj = np.dot(u, v) / np.linalg.norm(v)",
+    "solution": "import numpy as np\nu = np.array([4.0, 3.0])\nv = np.array([3.0, 4.0])\nresult = float(np.dot(u, v) / np.linalg.norm(v))",
+    "difficulty": "medium"
   }
 ]
