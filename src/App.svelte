@@ -4,6 +4,7 @@
   import Practice from './lib/views/Practice.svelte';
   import Progress from './lib/views/Progress.svelte';
   import Sql from './lib/views/Sql.svelte';
+  import Library from './lib/views/Library.svelte';
   import { view } from './lib/stores/view.js';
 </script>
 
@@ -15,6 +16,8 @@
     <Practice />
   {:else if $view === 'sql'}
     <Sql />
+  {:else if $view === 'library'}
+    <Library />
   {:else}
     <Progress />
   {/if}

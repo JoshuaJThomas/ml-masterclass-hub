@@ -9,6 +9,7 @@
       <button class:active={$view === 'learn'} onclick={() => view.set('learn')}>Learn</button>
       <button class:active={$view === 'practice'} onclick={() => view.set('practice')}>Practice</button>
       <button class:active={$view === 'sql'} onclick={() => view.set('sql')}>SQL</button>
+      <button class:active={$view === 'library'} onclick={() => view.set('library')}>Library</button>
       <button class:active={$view === 'progress'} onclick={() => view.set('progress')}>Progress</button>
     </nav>
     <span class="micro">v0.1</span>
