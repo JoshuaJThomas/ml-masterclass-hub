@@ -5,6 +5,7 @@
   import { loadActivity, currentStreak } from '../srs/activity.js';
   import { chapterMastery, summarize } from '../stats/mastery.js';
   import { loadSqlBank } from '../sql/loadSqlBank.js';
+  import { exportData, importData } from '../srs/backup.js';
 
   let loading = $state(true);
   let error = $state('');
@@ -54,6 +55,27 @@
   });
 
   const pct = (n, d) => (d ? Math.round((n / d) * 100) : 0);
+
+  function doExport() {
+    const blob = new Blob([JSON.stringify(exportData(), null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'mlhub-progress.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+  async function doImport(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const obj = JSON.parse(await file.text());
+      const r = importData(obj);
+      if (r.ok) location.reload();
+      else alert('Import failed: ' + r.error);
+    } catch {
+      alert('That file is not a valid backup.');
+    }
+  }
 </script>
 
 <section class="container pad">
@@ -92,6 +114,14 @@
 
     <h2 class="heading-feature">SQL</h2>
     <p class="body-large">{sqlTotals.known} mastered · {sqlTotals.seen} seen · {sqlTotals.total} total</p>
+
+    <h2 class="heading-feature">Backup</h2>
+    <div class="backup">
+      <button class="btn-secondary" onclick={doExport}>Export progress</button>
+      <label class="btn-secondary import">Import progress
+        <input type="file" accept="application/json" onchange={doImport} hidden />
+      </label>
+    </div>
   {/if}
 </section>
 
@@ -113,4 +143,6 @@
   .track { height: 8px; background: var(--color-soft-stone); border-radius: var(--radius-full); overflow: hidden; }
   .fill { height: 100%; background: var(--color-deep-green); border-radius: var(--radius-full); }
   .bar-num { text-align: right; }
+  .backup { display: flex; gap: var(--space-xl); align-items: center; }
+  .import { cursor: pointer; }
 </style>
