@@ -6,6 +6,7 @@
   <div class="container bar">
     <span class="brand mono-label">ML · MASTERCLASS</span>
     <nav>
+      <button class:active={$view === 'learn'} onclick={() => view.set('learn')}>Learn</button>
       <button class:active={$view === 'practice'} onclick={() => view.set('practice')}>Practice</button>
       <button class:active={$view === 'sql'} onclick={() => view.set('sql')}>SQL</button>
       <button class:active={$view === 'progress'} onclick={() => view.set('progress')}>Progress</button>

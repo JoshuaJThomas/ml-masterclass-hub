@@ -8,8 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "validate-bank": "node scripts/validate-bank.js",
-    "test": "vitest run && npm run validate-bank && npm run validate-sql-bank",
-    "validate-sql-bank": "node scripts/validate-sql-bank.js"
+    "test": "vitest run && npm run validate-bank && npm run validate-sql-bank && npm run validate-lessons",
+    "validate-sql-bank": "node scripts/validate-sql-bank.js",
+    "validate-lessons": "node scripts/validate-lessons.js"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^7.1.2",
@@ -27,6 +28,7 @@
     "@codemirror/view": "^6.43.0",
     "codemirror": "^6.0.2",
     "diff": "^9.0.0",
+    "marked": "^18.0.5",
     "ts-fsrs": "^5.4.1"
   }
 }

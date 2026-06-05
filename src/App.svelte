@@ -1,5 +1,6 @@
 <script>
   import Header from './lib/components/Header.svelte';
+  import Learn from './lib/views/Learn.svelte';
   import Practice from './lib/views/Practice.svelte';
   import Progress from './lib/views/Progress.svelte';
   import Sql from './lib/views/Sql.svelte';
@@ -8,7 +9,9 @@
 
 <Header />
 <main>
-  {#if $view === 'practice'}
+  {#if $view === 'learn'}
+    <Learn />
+  {:else if $view === 'practice'}
     <Practice />
   {:else if $view === 'sql'}
     <Sql />
