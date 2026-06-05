@@ -1560,5 +1560,27 @@
     "hint": "Calculate median with df['Age'].median(), then fillna.",
     "solution": "import pandas as pd; import numpy as np\ndf = pd.DataFrame({'Name': ['Joe', 'Jill', 'Jack', 'Jan'], 'Age': [25.0, np.nan, 35.0, np.nan]})\ndf_copy = df.copy()\ndf_copy['Age'] = df_copy['Age'].fillna(df_copy['Age'].median())\nresult = df_copy",
     "difficulty": "medium"
+  },
+  {
+    "id": "ch06-lag-feature-06",
+    "chapter": 6,
+    "topic": "lag features",
+    "prompt": "Shift the 'sales' column in `df` by 1 period to create a lag-1 feature. Assign the resulting Series (including the leading NaN) to `result`.",
+    "starterCode": "import pandas as pd\ndf = pd.DataFrame({'sales': [10, 20, 30, 40, 50]})\n# Assign to `result` the 'sales' column shifted by 1 period\nresult = ...",
+    "check": "import numpy as np\nassert np.isnan(result.iloc[0])\nassert list(result.iloc[1:]) == [10.0, 20.0, 30.0, 40.0]",
+    "hint": "Use `df['sales'].shift(1)` — the first element becomes NaN because there is no prior period.",
+    "solution": "import pandas as pd\ndf = pd.DataFrame({'sales': [10, 20, 30, 40, 50]})\nresult = df['sales'].shift(1)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch16-gradient-step-04",
+    "chapter": 16,
+    "topic": "gradient descent",
+    "prompt": "Perform one gradient descent update step for linear regression. The gradient is `(X.T @ (X @ w - y)) / n`. Compute the updated weights `w_new = w - lr * gradient` and assign to `result`.",
+    "starterCode": "import numpy as np\nX = np.array([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]])\ny = np.array([1.0, 2.0, 3.0])\nw = np.array([0.0, 0.0])\nlr = 0.01\n# Assign to `result` the updated weight vector after one gradient step\nresult = ...",
+    "check": "import numpy as np\nassert np.allclose(result, [22/300, 28/300])",
+    "hint": "Compute `n = len(y)`, then `gradient = (X.T @ (X @ w - y)) / n`, then `result = w - lr * gradient`.",
+    "solution": "import numpy as np\nX = np.array([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]])\ny = np.array([1.0, 2.0, 3.0])\nw = np.array([0.0, 0.0])\nlr = 0.01\nn = len(y)\ngradient = (X.T @ (X @ w - y)) / n\nresult = w - lr * gradient",
+    "difficulty": "medium"
   }
 ]
