@@ -5,6 +5,8 @@
   import { loadActivity, currentStreak } from '../srs/activity.js';
   import { chapterMastery, summarize } from '../stats/mastery.js';
   import { loadSqlBank } from '../sql/loadSqlBank.js';
+  import { loadLessons } from '../lessons/loadLessons.js';
+  import { computeGamification } from '../stats/gamification.js';
   import { exportData, importData } from '../srs/backup.js';
   import { getCurrentChapter, setCurrentChapter } from '../settings.js';
 
@@ -15,6 +17,7 @@
   let streak = $state(0);
   let heatmap = $state([]);
   let sqlTotals = $state({ total: 0, seen: 0, known: 0 });
+  let game = $state({ xp: 0, level: 1, xpIntoLevel: 0, badges: [], total: 0 });
   let currentChapter = $state(1);
   const MAX_CHAPTER = 24;
 
@@ -50,6 +53,10 @@
       try {
         const sqlBank = await loadSqlBank(import.meta.env.BASE_URL);
         sqlTotals = summarize(sqlBank.map((q) => ({ ...q, chapter: 1 })), progress, 1);
+        try {
+          const lessons = await loadLessons(import.meta.env.BASE_URL);
+          game = computeGamification({ progress, questions, sqlBank, lessons, streak });
+        } catch { /* optional */ }
       } catch { /* SQL bank optional */ }
     } catch (e) {
       error = String(e.message || e);
@@ -110,6 +117,19 @@
       <div class="stat"><span class="num">{totals.total}</span><span class="lbl">total</span></div>
     </div>
 
+    <div class="level">
+      <p class="mono-label" style="color: var(--color-deep-green)">LEVEL {game.level} · {game.xp} XP</p>
+      <div class="xpbar"><div class="xpfill" style="width: {game.xpIntoLevel}%"></div></div>
+    </div>
+    <div class="badges">
+      {#each game.badges as b}
+        <div class="badge" class:earned={b.earned} title={b.desc}>
+          <span class="bi">{b.earned ? '★' : '☆'}</span>
+          <span>{b.label}</span>
+        </div>
+      {/each}
+    </div>
+
     <h2 class="heading-feature">Activity</h2>
     <div class="heatmap" role="img" aria-label="practice activity, last 84 days">
       {#each heatmap as cell}
@@ -163,4 +183,11 @@
   .import { cursor: pointer; }
   .setting { display: flex; align-items: center; gap: var(--space-md); margin: var(--space-lg) 0; }
   .setting select { font-family: var(--font-mono); padding: 4px 8px; border: 1px solid var(--color-hairline); border-radius: var(--radius-xs); }
+  .level { margin: var(--space-lg) 0; max-width: 420px; }
+  .xpbar { height: 8px; background: var(--color-soft-stone); border-radius: var(--radius-full); overflow: hidden; margin-top: var(--space-xs); }
+  .xpfill { height: 100%; background: var(--color-deep-green); border-radius: var(--radius-full); }
+  .badges { display: flex; flex-wrap: wrap; gap: var(--space-md); margin-bottom: var(--space-xl); }
+  .badge { display: flex; align-items: center; gap: var(--space-xs); font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.28px; color: var(--color-muted); border: 1px solid var(--color-hairline); border-radius: var(--radius-pill); padding: 4px 12px; }
+  .badge.earned { color: var(--color-deep-green); border-color: var(--color-deep-green); background: var(--color-pale-green); }
+  .badge .bi { font-size: 13px; }
 </style>
