@@ -6,6 +6,7 @@
   import { chapterMastery, summarize } from '../stats/mastery.js';
   import { loadSqlBank } from '../sql/loadSqlBank.js';
   import { exportData, importData } from '../srs/backup.js';
+  import { getCurrentChapter, setCurrentChapter } from '../settings.js';
 
   let loading = $state(true);
   let error = $state('');
@@ -14,6 +15,8 @@
   let streak = $state(0);
   let heatmap = $state([]);
   let sqlTotals = $state({ total: 0, seen: 0, known: 0 });
+  let currentChapter = $state(1);
+  const MAX_CHAPTER = 24;
 
   const CHAPTER_NAMES = {
     1: 'Python', 2: 'NumPy', 3: 'pandas', 4: 'Matplotlib', 5: 'Seaborn',
@@ -39,6 +42,7 @@
       const progress = loadProgress();
       const activity = loadActivity();
       const now = new Date();
+      currentChapter = getCurrentChapter(meta.completedThrough);
       rows = chapterMastery(questions, progress, meta.completedThrough);
       totals = summarize(questions, progress, meta.completedThrough);
       streak = currentStreak(activity, now);
@@ -55,6 +59,11 @@
   });
 
   const pct = (n, d) => (d ? Math.round((n / d) * 100) : 0);
+
+  function onChapterChange(e) {
+    setCurrentChapter(Number(e.target.value));
+    location.reload();
+  }
 
   function doExport() {
     const blob = new Blob([JSON.stringify(exportData(), null, 2)], { type: 'application/json' });
@@ -86,6 +95,13 @@
     <p class="body-large">{error}</p>
   {:else}
     <p class="mono-label" style="color: var(--color-deep-green)">YOUR PROGRESS</p>
+
+    <div class="setting">
+      <label class="mono-label" for="cc">I'M CURRENTLY ON CHAPTER</label>
+      <select id="cc" value={currentChapter} onchange={onChapterChange}>
+        {#each Array(MAX_CHAPTER) as _, i}<option value={i + 1}>{i + 1}</option>{/each}
+      </select>
+    </div>
 
     <div class="stats">
       <div class="stat"><span class="num">{streak}</span><span class="lbl">day streak</span></div>
@@ -145,4 +161,6 @@
   .bar-num { text-align: right; }
   .backup { display: flex; gap: var(--space-xl); align-items: center; }
   .import { cursor: pointer; }
+  .setting { display: flex; align-items: center; gap: var(--space-md); margin: var(--space-lg) 0; }
+  .setting select { font-family: var(--font-mono); padding: 4px 8px; border: 1px solid var(--color-hairline); border-radius: var(--radius-xs); }
 </style>

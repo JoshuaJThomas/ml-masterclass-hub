@@ -4,6 +4,7 @@
   import SolutionDiff from '../components/SolutionDiff.svelte';
   import { loadBank } from '../bank/loadBank.js';
   import { buildDailySet } from '../srs/dailySet.js';
+  import { getCurrentChapter } from '../settings.js';
   import { newCard, grade, ratingFor } from '../srs/scheduler.js';
   import { loadProgress, recordReview } from '../srs/progress.js';
   import { logReview } from '../srs/activity.js';
@@ -32,7 +33,7 @@
     try {
       const { meta, questions } = await loadBank(import.meta.env.BASE_URL);
       const progress = loadProgress();
-      const set = buildDailySet(questions, meta.completedThrough, progress, today(), 5);
+      const set = buildDailySet(questions, getCurrentChapter(meta.completedThrough), progress, today(), 5);
       exercises = set.all;
       counts = { due: set.due.length, fresh: set.fresh.length };
       if (exercises.length) resetForCurrent();
