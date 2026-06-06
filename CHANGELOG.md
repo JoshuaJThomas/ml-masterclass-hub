@@ -5,3 +5,5 @@
 - 2026-06-05: nightly gardener — add 3 verified exercises (ch02-linspace-07, ch08-adjusted-r2-06, ch22-border-point-04)
 - 2026-06-05: gardener test run — add 2 verified exercises (ch06-lag-feature-06, ch16-gradient-step-04)
 - 2026-06-06: nightly gardener — add 2 verified exercises (ch02-cumsum-08, ch17-mcc-05)
+
+## 2026-06-06 — gardener — add 2 verified exercises (ch02-argsort-09, ch09-label-encoding-06)
