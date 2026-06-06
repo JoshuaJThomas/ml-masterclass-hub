@@ -7,3 +7,7 @@
 - 2026-06-06: nightly gardener — add 2 verified exercises (ch02-cumsum-08, ch17-mcc-05)
 
 ## 2026-06-06 — gardener — add 2 verified exercises (ch02-argsort-09, ch09-label-encoding-06)
+
+## 2026-06-06 — Gardener run
+- Added ch11-relu-05: relu activation (ch11, easy)
+- Added ch02-outer-product-10: outer product (ch02, medium)
