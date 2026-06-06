@@ -1692,5 +1692,27 @@
     "hint": "Use `np.random.choice(n, size=n, replace=True)` then `sorted(...)`.",
     "solution": "import numpy as np\nn = 6\nseed = 0\nnp.random.seed(seed)\nindices = np.random.choice(n, size=n, replace=True)\nresult = sorted(indices.tolist())",
     "difficulty": "medium"
+  },
+  {
+    "id": "ch02-transpose-13",
+    "chapter": 2,
+    "topic": "matrix transpose",
+    "prompt": "Assign to `result` the transpose of the 2-D array `M`. The result should have shape (3, 2).",
+    "starterCode": "import numpy as np\nM = np.array([[1, 2, 3], [4, 5, 6]])\n# Assign to `result` the transpose of M\nresult = ...",
+    "check": "assert result.shape == (3, 2)\nassert result.tolist() == [[1, 4], [2, 5], [3, 6]]",
+    "hint": "The `.T` attribute (or `np.transpose(M)`) gives the transpose of an array.",
+    "solution": "import numpy as np\nM = np.array([[1, 2, 3], [4, 5, 6]])\nresult = M.T",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch17-roc-auc-06",
+    "chapter": 17,
+    "topic": "ROC AUC",
+    "prompt": "Compute the area under the ROC curve (AUC) given false positive rates `fpr` and true positive rates `tpr`. Use the trapezoidal rule. Assign the result to `result`.",
+    "starterCode": "import numpy as np\nfpr = np.array([0.0, 0.2, 0.4, 0.6, 1.0])\ntpr = np.array([0.0, 0.4, 0.7, 0.9, 1.0])\n# Assign to `result` the AUC via the trapezoidal rule\nresult = ...",
+    "check": "assert abs(result - 0.69) < 1e-9",
+    "hint": "`np.trapezoid(y, x)` integrates y with respect to x using the trapezoidal rule \u2014 use tpr as y and fpr as x.",
+    "solution": "import numpy as np\nfpr = np.array([0.0, 0.2, 0.4, 0.6, 1.0])\ntpr = np.array([0.0, 0.4, 0.7, 0.9, 1.0])\nresult = float(np.trapezoid(tpr, fpr))",
+    "difficulty": "medium"
   }
 ]
