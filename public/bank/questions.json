@@ -1582,5 +1582,27 @@
     "hint": "Compute `n = len(y)`, then `gradient = (X.T @ (X @ w - y)) / n`, then `result = w - lr * gradient`.",
     "solution": "import numpy as np\nX = np.array([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]])\ny = np.array([1.0, 2.0, 3.0])\nw = np.array([0.0, 0.0])\nlr = 0.01\nn = len(y)\ngradient = (X.T @ (X @ w - y)) / n\nresult = w - lr * gradient",
     "difficulty": "medium"
+  },
+  {
+    "id": "ch02-cumsum-08",
+    "chapter": 2,
+    "topic": "numpy cumsum",
+    "prompt": "Using NumPy, compute the cumulative sum of `arr` along axis 1 (row-wise). Assign the resulting 2-D array to `result`.",
+    "starterCode": "import numpy as np\narr = np.array([[1, 2, 3], [4, 5, 6]])\n# Assign to `result` the row-wise cumulative sum of arr\nresult = ...",
+    "check": "assert result.tolist() == [[1, 3, 6], [4, 9, 15]]",
+    "hint": "`np.cumsum(arr, axis=1)` accumulates along each row.",
+    "solution": "import numpy as np\narr = np.array([[1, 2, 3], [4, 5, 6]])\nresult = np.cumsum(arr, axis=1)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch17-mcc-05",
+    "chapter": 17,
+    "topic": "Matthews Correlation Coefficient",
+    "prompt": "Compute the Matthews Correlation Coefficient (MCC) for binary predictions. MCC = (TP·TN − FP·FN) / √((TP+FP)(TP+FN)(TN+FP)(TN+FN)). Assign the result to `result`.",
+    "starterCode": "import numpy as np\ny_true = np.array([1, 0, 1, 1, 0, 0, 1])\ny_pred = np.array([1, 0, 0, 1, 1, 0, 1])\n# Assign to `result` the MCC\nresult = ...",
+    "check": "assert abs(result - 5/12) < 1e-9",
+    "hint": "Compute TP, TN, FP, FN with boolean masks, then apply the MCC formula with `np.sqrt`.",
+    "solution": "import numpy as np\ny_true = np.array([1, 0, 1, 1, 0, 0, 1])\ny_pred = np.array([1, 0, 0, 1, 1, 0, 1])\ntp = int(((y_true == 1) & (y_pred == 1)).sum())\ntn = int(((y_true == 0) & (y_pred == 0)).sum())\nfp = int(((y_true == 0) & (y_pred == 1)).sum())\nfn = int(((y_true == 1) & (y_pred == 0)).sum())\nresult = float((tp * tn - fp * fn) / np.sqrt((tp+fp)*(tp+fn)*(tn+fp)*(tn+fn)))",
+    "difficulty": "hard"
   }
 ]
