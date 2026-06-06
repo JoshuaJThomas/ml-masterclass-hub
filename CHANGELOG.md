@@ -11,3 +11,4 @@
 ## 2026-06-06 — Gardener run
 - Added ch11-relu-05: relu activation (ch11, easy)
 - Added ch02-outer-product-10: outer product (ch02, medium)
+- 2026-06-06 gardener: added 2 verified exercises (ch11-tanh-06, ch02-percentile-11)

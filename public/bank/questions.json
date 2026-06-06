@@ -1648,5 +1648,27 @@
     "hint": "Use `np.outer(a, b)` to compute the outer product.",
     "solution": "import numpy as np\na = np.array([1, 2, 3])\nb = np.array([10, 20])\nresult = np.outer(a, b)",
     "difficulty": "medium"
+  },
+  {
+    "id": "ch11-tanh-06",
+    "chapter": 11,
+    "topic": "tanh activation",
+    "prompt": "Apply the hyperbolic tangent activation (tanh) elementwise to array `z`. Assign the result to `result`.",
+    "starterCode": "import numpy as np\nz = np.array([-1.0, 0.0, 1.0])\n# Assign to `result` the tanh of each element in z\nresult = ...",
+    "check": "import numpy as np\nassert abs(result[1] - 0.0) < 1e-9\nassert abs(result[0] + result[2]) < 1e-9\nassert abs(result[2] - np.tanh(1.0)) < 1e-9",
+    "hint": "np.tanh(z) applies tanh elementwise. tanh is an odd function: tanh(-x) = -tanh(x).",
+    "solution": "import numpy as np\nz = np.array([-1.0, 0.0, 1.0])\nresult = np.tanh(z)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch02-percentile-11",
+    "chapter": 2,
+    "topic": "percentiles",
+    "prompt": "Compute the 25th percentile (Q1) and 75th percentile (Q3) of `arr`, then assign the interquartile range (IQR = Q3 - Q1) to `result`.",
+    "starterCode": "import numpy as np\narr = np.array([2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0])\nq1 = ...\nq3 = ...\n# Assign IQR to result\nresult = ...",
+    "check": "import numpy as np\nassert abs(q1 - 5.5) < 1e-9\nassert abs(q3 - 12.5) < 1e-9\nassert abs(result - 7.0) < 1e-9",
+    "hint": "np.percentile(arr, 25) gives Q1 and np.percentile(arr, 75) gives Q3. IQR = Q3 - Q1.",
+    "solution": "import numpy as np\narr = np.array([2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0])\nq1 = np.percentile(arr, 25)\nq3 = np.percentile(arr, 75)\nresult = float(q3 - q1)",
+    "difficulty": "medium"
   }
 ]
