@@ -1604,5 +1604,27 @@
     "hint": "Compute TP, TN, FP, FN with boolean masks, then apply the MCC formula with `np.sqrt`.",
     "solution": "import numpy as np\ny_true = np.array([1, 0, 1, 1, 0, 0, 1])\ny_pred = np.array([1, 0, 0, 1, 1, 0, 1])\ntp = int(((y_true == 1) & (y_pred == 1)).sum())\ntn = int(((y_true == 0) & (y_pred == 0)).sum())\nfp = int(((y_true == 0) & (y_pred == 1)).sum())\nfn = int(((y_true == 1) & (y_pred == 0)).sum())\nresult = float((tp * tn - fp * fn) / np.sqrt((tp+fp)*(tp+fn)*(tn+fp)*(tn+fn)))",
     "difficulty": "hard"
+  },
+  {
+    "id": "ch02-argsort-09",
+    "chapter": 2,
+    "topic": "argsort",
+    "prompt": "Using NumPy, assign to `result` the indices that would sort `arr` in ascending order (the argsort).",
+    "starterCode": "import numpy as np\narr = np.array([40, 10, 30, 20])\n# Assign to `result` the indices that sort arr ascending\nresult = ...",
+    "check": "assert result.tolist() == [1, 3, 2, 0]",
+    "hint": "`np.argsort(arr)` returns the indices that would sort the array in ascending order.",
+    "solution": "import numpy as np\narr = np.array([40, 10, 30, 20])\nresult = np.argsort(arr)",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch09-label-encoding-06",
+    "chapter": 9,
+    "topic": "label encoding",
+    "prompt": "Encode the 'size' column as integers using a fixed mapping: 'S'→0, 'M'→1, 'L'→2. Assign the resulting integer Series to `result`.",
+    "starterCode": "import pandas as pd\ndf = pd.DataFrame({'size': ['S', 'L', 'M', 'S', 'L']})\n# Map 'S'->0, 'M'->1, 'L'->2; assign to result\nresult = ...",
+    "check": "assert list(result) == [0, 2, 1, 0, 2]",
+    "hint": "Use the `.map()` method with a dict: `df['size'].map({'S': 0, 'M': 1, 'L': 2})`.",
+    "solution": "import pandas as pd\ndf = pd.DataFrame({'size': ['S', 'L', 'M', 'S', 'L']})\nresult = df['size'].map({'S': 0, 'M': 1, 'L': 2})",
+    "difficulty": "easy"
   }
 ]
