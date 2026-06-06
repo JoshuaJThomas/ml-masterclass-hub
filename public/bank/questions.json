@@ -1714,5 +1714,27 @@
     "hint": "`np.trapezoid(y, x)` integrates y with respect to x using the trapezoidal rule \u2014 use tpr as y and fpr as x.",
     "solution": "import numpy as np\nfpr = np.array([0.0, 0.2, 0.4, 0.6, 1.0])\ntpr = np.array([0.0, 0.4, 0.7, 0.9, 1.0])\nresult = float(np.trapezoid(tpr, fpr))",
     "difficulty": "medium"
+  },
+  {
+    "id": "ch12-knn-indices-05",
+    "chapter": 12,
+    "topic": "kNN index selection",
+    "prompt": "Given the precomputed `distances` from a query point to every training point, assign to `result` the indices of the `k` nearest training points in ascending distance order (closest first).",
+    "starterCode": "import numpy as np\ndistances = np.array([0.5, 2.1, 0.3, 1.7, 0.8])\nk = 3\n# Assign to `result` the indices of the k nearest points\nresult = ...",
+    "check": "import numpy as np\nassert result.tolist() == [2, 0, 4]",
+    "hint": "Sort the indices by distance with `np.argsort(distances)` and slice the first `k` entries.",
+    "solution": "import numpy as np\ndistances = np.array([0.5, 2.1, 0.3, 1.7, 0.8])\nk = 3\nresult = np.argsort(distances)[:k]",
+    "difficulty": "easy"
+  },
+  {
+    "id": "ch04-boxplot-07",
+    "chapter": 4,
+    "topic": "box plots",
+    "prompt": "Draw a box plot of `data` on axes `ax`. (Agg backend is already set.)",
+    "starterCode": "import matplotlib\nmatplotlib.use('Agg')\nimport matplotlib.pyplot as plt\ndata = [3, 7, 8, 5, 12, 14, 21, 13, 18]\nfig, ax = plt.subplots()\n# Draw a box plot of data on ax\n...",
+    "check": "assert len(ax.lines) == 7\nassert int(ax.lines[3].get_ydata()[0]) == 3\nassert int(ax.lines[4].get_ydata()[0]) == 21",
+    "hint": "Use `ax.boxplot(data)` to draw the box plot.",
+    "solution": "import matplotlib\nmatplotlib.use('Agg')\nimport matplotlib.pyplot as plt\ndata = [3, 7, 8, 5, 12, 14, 21, 13, 18]\nfig, ax = plt.subplots()\nax.boxplot(data)",
+    "difficulty": "easy"
   }
 ]

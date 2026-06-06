@@ -14,3 +14,4 @@
 - 2026-06-06 gardener: added 2 verified exercises (ch11-tanh-06, ch02-percentile-11)
 - 2026-06-06: gardener added 2 verified exercises (ch02-clip-12, ch10-bootstrap-04)
 - 2026-06-06: gardener added 2 verified exercises (ch02-transpose-13, ch17-roc-auc-06)
+- 2026-06-06: content gardener added 2 verified exercises (ch04-boxplot-07, ch12-knn-indices-05)
