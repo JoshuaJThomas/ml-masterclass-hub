@@ -6,11 +6,11 @@ Prioritized list of improvements for future runs. Remove items when completed.
 
 ## High Priority
 
-### MOBILE: Stack teach/apply split on narrow screens
-The Learn tab shows a two-column layout (lesson left, editor right). On screens <768px this should stack vertically. Add a CSS media query or Svelte responsive check so narrow screens see lesson content first, then the editor below. Touch targets on buttons should be ≥44px.
+### UX: Ctrl+Enter / Cmd+Enter keyboard shortcut to run code
+Add a CodeMirror keymap so pressing Ctrl+Enter (Windows/Linux) or Cmd+Enter (Mac) triggers the Run action in Practice, Learn, and SQL tabs. Pass an optional `onRun` prop to CodeEditor and wire it into a custom keymap extension — small, self-contained, high ergonomic value.
 
-### BUG/UX: CodeMirror on mobile — keyboard and zoom issues
-On iOS/Android, the CodeMirror editor can trigger unwanted zoom (font-size < 16px) and the virtual keyboard may obscure the editor. Set `font-size: 16px` on the editor, and ensure the editor container scrolls into view when focused.
+### BUG/UX: CodeMirror on mobile — scroll into view on focus
+The iOS zoom issue (font-size < 16px) was fixed. Remaining: when the virtual keyboard opens, it may obscure the CodeMirror editor. Add a `focus` handler on the editor host element to call `scrollIntoView({ behavior: 'smooth', block: 'nearest' })` so the editor stays visible when the keyboard pops up.
 
 ---
 
@@ -46,3 +46,9 @@ For a more app-like feel on mobile, swap the top scrollable nav for a fixed bott
 
 ### UX: Active tab indicator in header persists across page load
 The current view store is ephemeral (reset on reload). Save the last active tab to localStorage so reloading the page returns the user to where they were.
+
+### MOBILE: Reduce container padding at narrow widths (≤375px)
+The Practice and Learn containers use `var(--space-xxl)` (32px) vertical padding and the `.container` class has horizontal padding. At very narrow widths (iPhone SE: 375px) this wastes screen estate. Add a `@media (max-width: 400px)` rule to reduce padding to `var(--space-lg)` (16px) so more content is visible without scrolling.
+
+### A11Y: Add aria-label to CodeMirror editor host
+The CodeMirror editor host `<div>` has no accessible label, so screen readers announce only a generic "application" role. Add `aria-label="Python code editor"` (or "SQL code editor" when lang='sql') to the `.editor-host` element so assistive technology announces the editor's purpose.

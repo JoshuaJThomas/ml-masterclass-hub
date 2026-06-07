@@ -14,7 +14,7 @@
   let applyingExternal = false;
 
   const hostTheme = EditorView.theme({
-    '&': { borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-hairline)', fontSize: '14px' },
+    '&': { borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-hairline)', fontSize: '16px' },
     '.cm-content': { fontFamily: 'var(--font-mono)', minHeight: '200px' },
     '.cm-scroller': { fontFamily: 'var(--font-mono)' },
     '&.cm-focused': { outline: '2px solid var(--color-focus-blue)', outlineOffset: '1px' },
