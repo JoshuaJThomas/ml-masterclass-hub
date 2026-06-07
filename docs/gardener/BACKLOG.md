@@ -9,9 +9,6 @@ Prioritized list of improvements for future runs. Remove items when completed.
 ### MOBILE: Stack teach/apply split on narrow screens
 The Learn tab shows a two-column layout (lesson left, editor right). On screens <768px this should stack vertically. Add a CSS media query or Svelte responsive check so narrow screens see lesson content first, then the editor below. Touch targets on buttons should be ≥44px.
 
-### MOBILE: Tab navigation usability on small screens
-The 5-tab nav bar may overflow or have tiny tap targets on very narrow screens. Consider a horizontal scroll with `overflow-x: auto` and `white-space: nowrap`, or a bottom navigation bar pattern for mobile viewports.
-
 ### BUG/UX: CodeMirror on mobile — keyboard and zoom issues
 On iOS/Android, the CodeMirror editor can trigger unwanted zoom (font-size < 16px) and the virtual keyboard may obscure the editor. Set `font-size: 16px` on the editor, and ensure the editor container scrolls into view when focused.
 
@@ -40,3 +37,12 @@ The 626KB JS bundle is dominated by CodeMirror. Use dynamic import() so CodeMirr
 
 ### A11Y: Keyboard focus indicators
 Ensure all interactive elements (tab buttons, run button, hint toggle) have visible `:focus-visible` outlines consistent with the design system.
+
+### MOBILE: Practice/SQL tab — full-width editor layout on narrow screens
+On ≤640px the Practice and SQL tabs have the same two-column layout tension as Learn. Verify the editor and question prompt stack cleanly. Adjust padding/margins so nothing overflows.
+
+### MOBILE: Header — consider sticky bottom nav on mobile
+For a more app-like feel on mobile, swap the top scrollable nav for a fixed bottom navigation bar with icons (or short labels). Requires icon assets or SVG inline icons.
+
+### UX: Active tab indicator in header persists across page load
+The current view store is ephemeral (reset on reload). Save the last active tab to localStorage so reloading the page returns the user to where they were.
