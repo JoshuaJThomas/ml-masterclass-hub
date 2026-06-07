@@ -13,8 +13,8 @@ The iOS zoom issue (font-size < 16px) was fixed. Remaining: when the virtual key
 
 ## Medium Priority
 
-### CONTENT: Add exercises to ch24 (3 questions — thinnest chapter)
-ch24 covers model deployment. New topics not yet covered: input normalization pipeline (apply train-fitted scaler to test data), batch prediction loop, model versioning/metadata dict.
+### CONTENT: Add exercises to ch24 — normalization pipeline (1 remaining)
+ch24 now has 5 questions. One backlog topic remains: input normalization pipeline (apply train-fitted mean/std to test data using numpy). This is the last uncovered ch24 topic from the original list.
 
 ### CONTENT: Add exercises to ch07 (4 questions) — precision and recall
 ch07 covers classification metrics. Not yet covered: precision, recall, F1 score from raw TP/FP/FN/TN counts using numpy (no sklearn).
@@ -53,8 +53,7 @@ The CodeMirror editor host `<div>` has no accessible label, so screen readers an
 ### UX: Show Ctrl+Enter / Cmd+Enter hint tooltip near the Run button
 Now that the keyboard shortcut works, surface it to users: add a `title` attribute to the Run button (e.g. `title="Run (Ctrl+Enter)"`) so hovering shows the hint. On Mac, detect `navigator.platform` or `navigator.userAgentData` to show `Cmd+Enter` instead. Small, reinforces discoverability.
 
-### CONTENT: Add exercises to ch24 (2 more — currently 3, thinnest with ch07)
-ch24 covers model deployment. Topics not yet covered: batch prediction loop over a list of feature dicts, and model metadata versioning (store name/version/date in a dict and assert key presence). Both are self-contained numpy/dict exercises, no sklearn.
+### [DONE 2026-06-07] CONTENT: ch24 batch prediction + model metadata — completed
 
 ### UX: Show run-in-progress spinner or visual indicator in editor
 When Ctrl+Enter is pressed and run() is already in flight, a user gets no feedback that the keypress was ignored. Consider a subtle pulse/glow on the editor border while `running` is true so it's clear something is happening and no-ops are expected.
@@ -64,3 +63,12 @@ Add a small "Reset code" button (or link) below each editor that restores `code`
 
 ### CONTENT: ch07 precision/recall exercises
 ch07 has only 4 questions and covers classification metrics. Not yet covered: precision from TP/FP counts (numpy division), recall from TP/FN counts, F1 harmonic mean of P and R. These are self-contained arithmetic exercises. Add 2 new exercises to reach coverage parity with other chapters.
+
+### CONTENT: ch10 exercises (4 questions — joint-thinnest with ch13/14/15/16/18/19/20/21/22/23)
+ch10 covers regularization (L1/L2 penalties). Not yet covered: manual L2 penalty gradient (add lambda*w to gradient), L1 sparse-solution check (soft-thresholding), elastic-net mixing parameter. Add 2 new exercises.
+
+### UX: Keyboard navigation between exercises (n/p shortcuts)
+Once Ctrl+Enter is established as the run shortcut, add Alt+N / Alt+P (or Ctrl+] / Ctrl+[) to move to the next/previous exercise without reaching for the mouse. Small change: intercept keydown on the page and call nextQuestion/prevQuestion. Helps power users flow through drills quickly.
+
+### A11Y: Progress tab — announce score update via aria-live
+When a new exercise is completed correctly and the score increments, screen readers don't know. Add `aria-live="polite"` to the score display element in the Progress tab so assistive technology announces the updated count immediately after the check passes.

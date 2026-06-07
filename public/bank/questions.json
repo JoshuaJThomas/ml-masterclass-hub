@@ -1758,5 +1758,27 @@
     "hint": "Use np.unique(labels, return_counts=True) to get class counts, divide by len(labels) for probabilities, then compute 1 - np.sum(probs**2).",
     "solution": "import numpy as np\nlabels = np.array([0, 0, 1, 1, 1, 2])\nn = len(labels)\n_, counts = np.unique(labels, return_counts=True)\nprobs = counts / n\nresult = 1 - np.sum(probs**2)",
     "difficulty": "easy"
+  },
+  {
+    "id": "ch24-batch-predict-04",
+    "chapter": 24,
+    "topic": "batch prediction",
+    "prompt": "A deployed model receives requests as a list of feature dicts. Build a feature matrix `X` (shape 3\u00d73) from `feature_dicts` (keys `x0`, `x1`, `x2` in that order), then compute batch predictions `result = X @ weights + bias`.",
+    "starterCode": "import numpy as np\nweights = np.array([0.5, -0.2, 0.8])\nbias = 1.0\nfeature_dicts = [\n    {'x0': 2.0, 'x1': 1.0, 'x2': 0.5},\n    {'x0': -1.0, 'x1': 3.0, 'x2': 2.0},\n    {'x0': 0.0, 'x1': 0.0, 'x2': 1.0},\n]\n# Build X from feature_dicts, then compute result\nresult = ...",
+    "check": "import numpy as np\nassert np.allclose(result, [2.2, 1.5, 1.8])",
+    "hint": "Use a list comprehension: `[[d['x0'], d['x1'], d['x2']] for d in feature_dicts]`, wrap it in `np.array()`, then apply the linear formula.",
+    "solution": "import numpy as np\nweights = np.array([0.5, -0.2, 0.8])\nbias = 1.0\nfeature_dicts = [\n    {'x0': 2.0, 'x1': 1.0, 'x2': 0.5},\n    {'x0': -1.0, 'x1': 3.0, 'x2': 2.0},\n    {'x0': 0.0, 'x1': 0.0, 'x2': 1.0},\n]\nX = np.array([[d['x0'], d['x1'], d['x2']] for d in feature_dicts])\nresult = X @ weights + bias",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch24-model-metadata-05",
+    "chapter": 24,
+    "topic": "model versioning",
+    "prompt": "Deployed models should carry metadata. Create a dict `model_metadata` with keys `name` (= `'linear_classifier'`), `version` (= `'1.0.0'`), `n_features` (= `10`), and `created_at` (= `'2026-01-01'`). Then set `result` to the sorted list of its keys.",
+    "starterCode": "# Create model_metadata dict with the required keys, then set result\nmodel_metadata = ...\nresult = ...",
+    "check": "assert isinstance(model_metadata, dict)\nassert {'name', 'version', 'n_features', 'created_at'}.issubset(model_metadata.keys())\nassert model_metadata['n_features'] == 10\nassert result == ['created_at', 'n_features', 'name', 'version']",
+    "hint": "Use a plain dict literal, then `sorted(model_metadata.keys())`.",
+    "solution": "model_metadata = {\n    'name': 'linear_classifier',\n    'version': '1.0.0',\n    'n_features': 10,\n    'created_at': '2026-01-01'\n}\nresult = sorted(model_metadata.keys())",
+    "difficulty": "easy"
   }
 ]
