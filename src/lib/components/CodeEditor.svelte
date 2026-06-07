@@ -8,7 +8,7 @@
   import { sql } from '@codemirror/lang-sql';
   import { oneDark } from '@codemirror/theme-one-dark';
 
-  let { value = $bindable(''), lang = 'python' } = $props();
+  let { value = $bindable(''), lang = 'python', onRun = null } = $props();
   let host;
   let view;
   let applyingExternal = false;
@@ -28,7 +28,7 @@
         extensions: [
           basicSetup,
           (lang === 'sql' ? sql() : python()),
-          keymap.of([indentWithTab]),
+          keymap.of([indentWithTab, { key: 'Mod-Enter', run: () => { if (onRun) { onRun(); return true; } return false; } }]),
           oneDark,
           hostTheme,
           EditorView.updateListener.of((u) => {

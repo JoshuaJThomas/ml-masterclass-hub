@@ -88,7 +88,7 @@
     <h1 class="heading-feature">{current.topic}</h1>
     <p class="body-large" style="color: var(--color-body-muted); max-width: 720px;">{current.prompt}</p>
 
-    <CodeEditor bind:value={query} lang="sql" />
+    <CodeEditor bind:value={query} lang="sql" onRun={run} />
 
     <div class="actions">
       <button class="btn-primary" onclick={run} disabled={running}>{running ? 'Running…' : 'Run'}</button>
