@@ -6,8 +6,11 @@ Prioritized list of improvements for future runs. Remove items when completed.
 
 ## High Priority
 
-### BUG/UX: CodeMirror on mobile — scroll into view on focus
-The iOS zoom issue (font-size < 16px) was fixed. Remaining: when the virtual keyboard opens, it may obscure the CodeMirror editor. Add a `focus` handler on the editor host element to call `scrollIntoView({ behavior: 'smooth', block: 'nearest' })` so the editor stays visible when the keyboard pops up.
+### PWA: Web manifest + service worker for installability
+Add a `manifest.json` (name, icons, display:standalone, theme_color) and a minimal service worker that caches the app shell for offline use. This makes the app installable on mobile home screens. Move up from Medium since mobile polish is well-advanced now.
+
+### UX: Active tab indicator persists across page load
+The current view store resets on every page reload. Save the last active tab to localStorage so reloading the page returns the user to where they were. One `localStorage.getItem`/`setItem` call in the view store — very small change.
 
 ---
 
@@ -54,6 +57,10 @@ The CodeMirror editor host `<div>` has no accessible label, so screen readers an
 Now that the keyboard shortcut works, surface it to users: add a `title` attribute to the Run button (e.g. `title="Run (Ctrl+Enter)"`) so hovering shows the hint. On Mac, detect `navigator.platform` or `navigator.userAgentData` to show `Cmd+Enter` instead. Small, reinforces discoverability.
 
 ### [DONE 2026-06-07] CONTENT: ch24 batch prediction + model metadata — completed
+### [DONE 2026-06-07] BUG/UX: CodeMirror mobile scroll-into-view on focus — completed (focusin + 300ms delay)
+
+### MOBILE: Swipe gesture to navigate between exercises
+Now that mobile UX is well-polished (font, scroll, tab nav), consider adding touch swipe gestures (left/right) on the Practice and Learn panels to move next/prev exercise. Use Pointer Events API — no library needed. Small `pointerdown`/`pointerup` delta check in Practice.svelte and Learn.svelte.
 
 ### UX: Show run-in-progress spinner or visual indicator in editor
 When Ctrl+Enter is pressed and run() is already in flight, a user gets no feedback that the keypress was ignored. Consider a subtle pulse/glow on the editor border while `running` is true so it's clear something is happening and no-ops are expected.
