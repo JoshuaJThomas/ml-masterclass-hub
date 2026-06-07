@@ -20,6 +20,11 @@
     '&.cm-focused': { outline: '2px solid var(--color-focus-blue)', outlineOffset: '1px' },
   });
 
+  function onEditorFocus() {
+    // Delay lets the mobile virtual keyboard finish animating before scrolling.
+    setTimeout(() => host?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 300);
+  }
+
   onMount(() => {
     view = new EditorView({
       parent: host,
@@ -37,6 +42,7 @@
         ],
       }),
     });
+    host.addEventListener('focusin', onEditorFocus);
   });
 
   // Reflect external value changes (e.g. navigating to a new exercise's starterCode).
@@ -49,7 +55,10 @@
     }
   });
 
-  onDestroy(() => view?.destroy());
+  onDestroy(() => {
+    host?.removeEventListener('focusin', onEditorFocus);
+    view?.destroy();
+  });
 </script>
 
 <div class="editor-host" bind:this={host}></div>

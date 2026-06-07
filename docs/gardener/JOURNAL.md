@@ -2,6 +2,28 @@
 
 ---
 
+## 2026-06-07T06:09Z
+
+**Focus:** Bug/UX fix — CodeMirror mobile scroll-into-view on focus
+
+**Chosen because:** Highest-priority backlog item (High Priority section). iOS/Android virtual keyboard can obscure the CodeMirror editor when it opens. This is a direct follow-on to the font-size fix (02:06Z) and the mobile tab nav fix (01:08Z), continuing the mobile-polish thread.
+
+**Changes:**
+- `src/lib/components/CodeEditor.svelte`:
+  - Added `onEditorFocus()` function: calls `host.scrollIntoView({ behavior: 'smooth', block: 'nearest' })` with a 300ms delay (to let the virtual keyboard finish animating before scrolling).
+  - In `onMount`: attached `onEditorFocus` as a `focusin` listener on the host div — `focusin` bubbles up from CodeMirror's inner `.cm-content` element.
+  - In `onDestroy`: removed the `focusin` listener before destroying the editor view.
+
+**Test+build:** 19 files / 70 tests passed; Bank valid: 162 questions across chapters 1-24; build succeeded (benign 626KB chunk warning)
+
+**Browser smoke:** browser unavailable (Chromium apt deps blocked in env)
+
+**Outcome:** App-code change — both npm test and npm run build passed — auto-merged (see PR)
+
+**New backlog ideas added:** see BACKLOG.md
+
+---
+
 ## 2026-06-07T05:08Z
 
 **Focus:** Content — add 2 exercises to ch24 (thinnest chapter, 3 questions)
