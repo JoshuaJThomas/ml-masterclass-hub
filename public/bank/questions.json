@@ -1736,5 +1736,27 @@
     "hint": "Use `ax.boxplot(data)` to draw the box plot.",
     "solution": "import matplotlib\nmatplotlib.use('Agg')\nimport matplotlib.pyplot as plt\ndata = [3, 7, 8, 5, 12, 14, 21, 13, 18]\nfig, ax = plt.subplots()\nax.boxplot(data)",
     "difficulty": "easy"
+  },
+  {
+    "id": "ch13-kernel-rbf-04",
+    "chapter": 13,
+    "topic": "RBF kernel",
+    "prompt": "Compute the Radial Basis Function (RBF/Gaussian) kernel between vectors `x` and `z` with bandwidth `gamma`. K(x,z) = exp(-gamma * ||x-z||\u00b2). Assign the scalar to `result`.",
+    "starterCode": "import numpy as np\nx = np.array([1.0, 2.0, 3.0])\nz = np.array([4.0, 5.0, 6.0])\ngamma = 0.5\n# Assign to `result` the RBF kernel value K(x, z)\nresult = ...",
+    "check": "import numpy as np\nassert abs(result - np.exp(-0.5 * 27.0)) < 1e-9",
+    "hint": "Compute the squared Euclidean distance with np.sum((x-z)**2), then apply np.exp(-gamma * distance).",
+    "solution": "import numpy as np\nx = np.array([1.0, 2.0, 3.0])\nz = np.array([4.0, 5.0, 6.0])\ngamma = 0.5\nresult = np.exp(-gamma * np.sum((x - z)**2))",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch15-gini-impurity-04",
+    "chapter": 15,
+    "topic": "Gini impurity",
+    "prompt": "Compute the Gini impurity of class labels: G = 1 - \u03a3 p\u1d62\u00b2. Use `np.unique` to count class frequencies, divide by n to get probabilities, then apply the formula. Assign the scalar to `result`.",
+    "starterCode": "import numpy as np\nlabels = np.array([0, 0, 1, 1, 1, 2])\n# Assign to `result` the Gini impurity of labels\nresult = ...",
+    "check": "import numpy as np\nassert abs(result - (22/36)) < 1e-9",
+    "hint": "Use np.unique(labels, return_counts=True) to get class counts, divide by len(labels) for probabilities, then compute 1 - np.sum(probs**2).",
+    "solution": "import numpy as np\nlabels = np.array([0, 0, 1, 1, 1, 2])\nn = len(labels)\n_, counts = np.unique(labels, return_counts=True)\nprobs = counts / n\nresult = 1 - np.sum(probs**2)",
+    "difficulty": "easy"
   }
 ]
