@@ -17,3 +17,24 @@
 **Outcome:** Content-only change — auto-merged (see PR)
 
 **New backlog ideas added:** see BACKLOG.md
+
+---
+
+## 2026-06-07T01:08Z
+
+**Focus:** Mobile — header tab nav usability on small screens
+
+**Changes:**
+- `src/lib/components/Header.svelte`: added `@media (max-width: 640px)` block:
+  - `.bar` wraps (flex-wrap), height auto, compact padding
+  - `nav` moves to its own row (order:3, full width), `overflow-x: auto` with `-webkit-overflow-scrolling: touch`, scrollbar hidden
+  - nav buttons get `min-height: 44px` (touch-friendly tap targets) and `white-space: nowrap`
+  - `.version` span ("v0.1") hidden on mobile (cosmetic, saves space)
+
+**Test+build:** 19 files / 70 tests passed; build succeeded (benign 626KB chunk warning); Bank valid: 160 questions
+
+**Browser smoke:** browser unavailable (Playwright installed, Chromium apt deps failed)
+
+**Outcome:** App-code change — both npm test and npm run build passed — auto-merged (see PR)
+
+**New backlog ideas added:** Practice/SQL mobile overflow audit; sticky bottom nav consideration; persist active tab in localStorage
