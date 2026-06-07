@@ -6,9 +6,6 @@ Prioritized list of improvements for future runs. Remove items when completed.
 
 ## High Priority
 
-### UX: Ctrl+Enter / Cmd+Enter keyboard shortcut to run code
-Add a CodeMirror keymap so pressing Ctrl+Enter (Windows/Linux) or Cmd+Enter (Mac) triggers the Run action in Practice, Learn, and SQL tabs. Pass an optional `onRun` prop to CodeEditor and wire it into a custom keymap extension — small, self-contained, high ergonomic value.
-
 ### BUG/UX: CodeMirror on mobile — scroll into view on focus
 The iOS zoom issue (font-size < 16px) was fixed. Remaining: when the virtual keyboard opens, it may obscure the CodeMirror editor. Add a `focus` handler on the editor host element to call `scrollIntoView({ behavior: 'smooth', block: 'nearest' })` so the editor stays visible when the keyboard pops up.
 
@@ -52,3 +49,12 @@ The Practice and Learn containers use `var(--space-xxl)` (32px) vertical padding
 
 ### A11Y: Add aria-label to CodeMirror editor host
 The CodeMirror editor host `<div>` has no accessible label, so screen readers announce only a generic "application" role. Add `aria-label="Python code editor"` (or "SQL code editor" when lang='sql') to the `.editor-host` element so assistive technology announces the editor's purpose.
+
+### UX: Show Ctrl+Enter / Cmd+Enter hint tooltip near the Run button
+Now that the keyboard shortcut works, surface it to users: add a `title` attribute to the Run button (e.g. `title="Run (Ctrl+Enter)"`) so hovering shows the hint. On Mac, detect `navigator.platform` or `navigator.userAgentData` to show `Cmd+Enter` instead. Small, reinforces discoverability.
+
+### CONTENT: Add exercises to ch24 (2 more — currently 3, thinnest with ch07)
+ch24 covers model deployment. Topics not yet covered: batch prediction loop over a list of feature dicts, and model metadata versioning (store name/version/date in a dict and assert key presence). Both are self-contained numpy/dict exercises, no sklearn.
+
+### UX: Disable Run button and Ctrl+Enter while already running
+Currently the Run button is `disabled={running}` but the keyboard shortcut bypasses that guard — rapid Ctrl+Enter presses queue concurrent async calls. Guard the keymap `onRun` by reading the `running` state: pass a `disabled` prop to CodeEditor (or a wrapper `onRun` that no-ops when `running` is true) so the shortcut also respects the in-flight state.

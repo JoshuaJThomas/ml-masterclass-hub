@@ -97,7 +97,7 @@
         <div class="apply">
           <p class="mono-label" style="color: var(--color-deep-green)">NOW TRY IT</p>
           <p class="body-large" style="color: var(--color-body-muted)">{current.prompt}</p>
-          <CodeEditor bind:value={code} />
+          <CodeEditor bind:value={code} onRun={run} />
           <div class="actions">
             <button class="btn-primary" onclick={run} disabled={running}>{running ? 'Running…' : 'Run'}</button>
             <button class="btn-secondary" onclick={toggleHint}>{showHint ? 'Hide hint' : 'Show hint'}</button>
