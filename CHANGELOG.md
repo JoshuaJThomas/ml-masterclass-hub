@@ -1,5 +1,7 @@
 ## Changelog
 
+- 2026-06-07: gardener added 2 verified ch24 exercises (ch24-batch-predict-04, ch24-model-metadata-05) — batch prediction loop and model versioning metadata
+
 - 2026-06-07: gardener guarded run() against concurrent Ctrl+Enter calls — keyboard shortcut now respects in-flight state
 
 - 2026-06-07: gardener fixed CodeMirror font-size to 16px — prevents iOS Safari auto-zoom on mobile

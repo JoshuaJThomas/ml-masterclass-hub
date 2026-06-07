@@ -2,6 +2,27 @@
 
 ---
 
+## 2026-06-07T05:08Z
+
+**Focus:** Content — add 2 exercises to ch24 (thinnest chapter, 3 questions)
+
+**Chosen because:** Content last landed 4 runs ago (00:00Z); ch24 was the thinnest chapter (3 questions); backlog identified batch prediction and model versioning as uncovered topics.
+
+**Changes:**
+- Added `ch24-batch-predict-04`: batch prediction loop — build feature matrix from list of dicts, apply `X @ weights + bias` (medium)
+- Added `ch24-model-metadata-05`: model versioning — create metadata dict with required keys, return sorted key list (easy)
+- Updated `public/bank/meta.json`: `generatedAt` → `2026-06-07`
+
+**Test+build:** 19 files / 70 tests passed; `Bank valid: 162 questions across chapters 1-24`; build succeeded (benign 626KB chunk warning)
+
+**Browser smoke:** browser unavailable (Chromium apt deps blocked in env)
+
+**Outcome:** Content-only change — bank validator passed — auto-merged (see PR)
+
+**New backlog ideas added:** see BACKLOG.md
+
+---
+
 ## 2026-06-07T04:10Z
 
 **Focus:** Bug fix — guard `run()` against concurrent Ctrl+Enter calls
