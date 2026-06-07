@@ -1,5 +1,7 @@
 ## Changelog
 
+- 2026-06-07: gardener guarded run() against concurrent Ctrl+Enter calls — keyboard shortcut now respects in-flight state
+
 - 2026-06-07: gardener fixed CodeMirror font-size to 16px — prevents iOS Safari auto-zoom on mobile
 
 - 2026-06-07: gardener added 2 verified exercises (ch13-kernel-rbf-04, ch15-gini-impurity-04)

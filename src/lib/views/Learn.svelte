@@ -52,6 +52,7 @@
   function revealSolution() { showSolution = !showSolution; if (showSolution) usedHelp = true; }
 
   async function run() {
+    if (running) return;
     running = true; result = null;
     try {
       const pyodide = await getPyodide((s) => (status = s));

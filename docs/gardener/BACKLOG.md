@@ -56,5 +56,11 @@ Now that the keyboard shortcut works, surface it to users: add a `title` attribu
 ### CONTENT: Add exercises to ch24 (2 more — currently 3, thinnest with ch07)
 ch24 covers model deployment. Topics not yet covered: batch prediction loop over a list of feature dicts, and model metadata versioning (store name/version/date in a dict and assert key presence). Both are self-contained numpy/dict exercises, no sklearn.
 
-### UX: Disable Run button and Ctrl+Enter while already running
-Currently the Run button is `disabled={running}` but the keyboard shortcut bypasses that guard — rapid Ctrl+Enter presses queue concurrent async calls. Guard the keymap `onRun` by reading the `running` state: pass a `disabled` prop to CodeEditor (or a wrapper `onRun` that no-ops when `running` is true) so the shortcut also respects the in-flight state.
+### UX: Show run-in-progress spinner or visual indicator in editor
+When Ctrl+Enter is pressed and run() is already in flight, a user gets no feedback that the keypress was ignored. Consider a subtle pulse/glow on the editor border while `running` is true so it's clear something is happening and no-ops are expected.
+
+### UX: Reset code to starterCode button
+Add a small "Reset code" button (or link) below each editor that restores `code` to `current.starterCode`. Useful when a learner has mangled the starter code and wants a clean slate. Small, self-contained — one button + one line in Practice.svelte and Learn.svelte.
+
+### CONTENT: ch07 precision/recall exercises
+ch07 has only 4 questions and covers classification metrics. Not yet covered: precision from TP/FP counts (numpy division), recall from TP/FN counts, F1 harmonic mean of P and R. These are self-contained arithmetic exercises. Add 2 new exercises to reach coverage parity with other chapters.

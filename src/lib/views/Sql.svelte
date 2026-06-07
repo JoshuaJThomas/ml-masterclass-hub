@@ -56,6 +56,7 @@
   function revealSolution() { showSolution = !showSolution; if (showSolution) { usedHelp = true; gradeOnce(false); } }
 
   async function run() {
+    if (running) return;
     running = true; actual = null; result = null;
     try {
       const db = await getDb((s) => (status = s));
