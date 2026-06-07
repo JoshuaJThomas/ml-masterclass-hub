@@ -2,6 +2,25 @@
 
 ---
 
+## 2026-06-07T07:09Z
+
+**Focus:** UX — persist active tab across page reload (localStorage)
+
+**Chosen because:** Top High Priority backlog item. Every page reload resets the view store to `'practice'`, losing the user's position. This is a tiny, zero-risk change that directly improves daily UX.
+
+**Changes:**
+- `src/lib/stores/view.js`: replaced `writable('practice')` with a store that (a) reads `localStorage.getItem('mlhub.view.v1')` on init — validating against the 5 known view names, falling back to `'practice'` — and (b) subscribes to its own changes to write back to localStorage. Both read and write are wrapped in try/catch for environments where localStorage is blocked. New localStorage key: `mlhub.view.v1` (doesn't clash with the protected keys `mlhub.progress.v1`, `mlhub.activity.v1`, `mlhub.currentChapter`).
+
+**Test+build:** 19 files / 70 tests passed; build succeeded (benign 627KB chunk warning)
+
+**Browser smoke:** browser unavailable (Chromium apt deps blocked in env)
+
+**Outcome:** App-code change — both npm test and npm run build passed — auto-merged (see PR below)
+
+**New backlog ideas added:** see BACKLOG.md
+
+---
+
 ## 2026-06-07T06:09Z
 
 **Focus:** Bug/UX fix — CodeMirror mobile scroll-into-view on focus
