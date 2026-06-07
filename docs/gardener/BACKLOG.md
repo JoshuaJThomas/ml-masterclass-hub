@@ -7,10 +7,13 @@ Prioritized list of improvements for future runs. Remove items when completed.
 ## High Priority
 
 ### PWA: Web manifest + service worker for installability
-Add a `manifest.json` (name, icons, display:standalone, theme_color) and a minimal service worker that caches the app shell for offline use. This makes the app installable on mobile home screens. Move up from Medium since mobile polish is well-advanced now.
+Add a `manifest.json` (name, icons, display:standalone, theme_color) and a minimal service worker that caches the app shell for offline use. This makes the app installable on mobile home screens. Mobile polish is well-advanced now — this is the next logical step.
 
-### UX: Active tab indicator persists across page load
-The current view store resets on every page reload. Save the last active tab to localStorage so reloading the page returns the user to where they were. One `localStorage.getItem`/`setItem` call in the view store — very small change.
+### CONTENT: Add exercises to ch07 (4 questions) — precision and recall
+ch07 covers classification metrics. Not yet covered: precision, recall, F1 score from raw TP/FP/FN/TN counts using numpy (no sklearn). 2 exercises would bring ch07 in line with better-covered chapters.
+
+### UX: Show Ctrl+Enter / Cmd+Enter hint tooltip near the Run button
+Now that the keyboard shortcut works, surface it to users: add a `title` attribute to the Run button (e.g. `title="Run (Ctrl+Enter)"`) so hovering shows the hint. Small, reinforces discoverability.
 
 ---
 
@@ -19,11 +22,14 @@ The current view store resets on every page reload. Save the last active tab to 
 ### CONTENT: Add exercises to ch24 — normalization pipeline (1 remaining)
 ch24 now has 5 questions. One backlog topic remains: input normalization pipeline (apply train-fitted mean/std to test data using numpy). This is the last uncovered ch24 topic from the original list.
 
-### CONTENT: Add exercises to ch07 (4 questions) — precision and recall
-ch07 covers classification metrics. Not yet covered: precision, recall, F1 score from raw TP/FP/FN/TN counts using numpy (no sklearn).
+### CONTENT: ch10 exercises (4 questions — joint-thinnest)
+ch10 covers regularization (L1/L2 penalties). Not yet covered: manual L2 penalty gradient (add lambda*w to gradient), L1 sparse-solution check (soft-thresholding). Add 2 new exercises.
 
-### PWA: Web manifest + service worker for installability
-Add a `manifest.json` (name, icons, display:standalone, theme_color) and a minimal service worker that caches the app shell for offline use. This makes the app installable on mobile home screens.
+### UX: Reset code to starterCode button
+Add a small "Reset code" button (or link) below each editor that restores `code` to `current.starterCode`. Useful when a learner has mangled the starter code and wants a clean slate. Small, self-contained — one button + one line in Practice.svelte and Learn.svelte.
+
+### UX: Keyboard navigation between exercises (n/p shortcuts)
+Add Alt+N / Alt+P (or similar) to move to the next/previous exercise without reaching for the mouse. Intercept keydown on the page and call nextQuestion/prevQuestion. Helps power users flow through drills quickly.
 
 ---
 
@@ -44,38 +50,39 @@ On ≤640px the Practice and SQL tabs have the same two-column layout tension as
 ### MOBILE: Header — consider sticky bottom nav on mobile
 For a more app-like feel on mobile, swap the top scrollable nav for a fixed bottom navigation bar with icons (or short labels). Requires icon assets or SVG inline icons.
 
-### UX: Active tab indicator in header persists across page load
-The current view store is ephemeral (reset on reload). Save the last active tab to localStorage so reloading the page returns the user to where they were.
-
 ### MOBILE: Reduce container padding at narrow widths (≤375px)
 The Practice and Learn containers use `var(--space-xxl)` (32px) vertical padding and the `.container` class has horizontal padding. At very narrow widths (iPhone SE: 375px) this wastes screen estate. Add a `@media (max-width: 400px)` rule to reduce padding to `var(--space-lg)` (16px) so more content is visible without scrolling.
 
 ### A11Y: Add aria-label to CodeMirror editor host
 The CodeMirror editor host `<div>` has no accessible label, so screen readers announce only a generic "application" role. Add `aria-label="Python code editor"` (or "SQL code editor" when lang='sql') to the `.editor-host` element so assistive technology announces the editor's purpose.
 
-### UX: Show Ctrl+Enter / Cmd+Enter hint tooltip near the Run button
-Now that the keyboard shortcut works, surface it to users: add a `title` attribute to the Run button (e.g. `title="Run (Ctrl+Enter)"`) so hovering shows the hint. On Mac, detect `navigator.platform` or `navigator.userAgentData` to show `Cmd+Enter` instead. Small, reinforces discoverability.
-
-### [DONE 2026-06-07] CONTENT: ch24 batch prediction + model metadata — completed
-### [DONE 2026-06-07] BUG/UX: CodeMirror mobile scroll-into-view on focus — completed (focusin + 300ms delay)
-
 ### MOBILE: Swipe gesture to navigate between exercises
-Now that mobile UX is well-polished (font, scroll, tab nav), consider adding touch swipe gestures (left/right) on the Practice and Learn panels to move next/prev exercise. Use Pointer Events API — no library needed. Small `pointerdown`/`pointerup` delta check in Practice.svelte and Learn.svelte.
+Consider adding touch swipe gestures (left/right) on the Practice and Learn panels to move next/prev exercise. Use Pointer Events API — no library needed. Small `pointerdown`/`pointerup` delta check in Practice.svelte and Learn.svelte.
 
 ### UX: Show run-in-progress spinner or visual indicator in editor
 When Ctrl+Enter is pressed and run() is already in flight, a user gets no feedback that the keypress was ignored. Consider a subtle pulse/glow on the editor border while `running` is true so it's clear something is happening and no-ops are expected.
 
-### UX: Reset code to starterCode button
-Add a small "Reset code" button (or link) below each editor that restores `code` to `current.starterCode`. Useful when a learner has mangled the starter code and wants a clean slate. Small, self-contained — one button + one line in Practice.svelte and Learn.svelte.
-
-### CONTENT: ch07 precision/recall exercises
-ch07 has only 4 questions and covers classification metrics. Not yet covered: precision from TP/FP counts (numpy division), recall from TP/FN counts, F1 harmonic mean of P and R. These are self-contained arithmetic exercises. Add 2 new exercises to reach coverage parity with other chapters.
-
-### CONTENT: ch10 exercises (4 questions — joint-thinnest with ch13/14/15/16/18/19/20/21/22/23)
-ch10 covers regularization (L1/L2 penalties). Not yet covered: manual L2 penalty gradient (add lambda*w to gradient), L1 sparse-solution check (soft-thresholding), elastic-net mixing parameter. Add 2 new exercises.
-
-### UX: Keyboard navigation between exercises (n/p shortcuts)
-Once Ctrl+Enter is established as the run shortcut, add Alt+N / Alt+P (or Ctrl+] / Ctrl+[) to move to the next/previous exercise without reaching for the mouse. Small change: intercept keydown on the page and call nextQuestion/prevQuestion. Helps power users flow through drills quickly.
-
 ### A11Y: Progress tab — announce score update via aria-live
 When a new exercise is completed correctly and the score increments, screen readers don't know. Add `aria-live="polite"` to the score display element in the Progress tab so assistive technology announces the updated count immediately after the check passes.
+
+### UX: Persist scroll position on Practice/Learn tabs between tab switches
+When switching away from Practice or Learn and back, the scroll position and current question index reset. Could store the exercise index in the view store or a separate ephemeral store so switching tabs doesn't lose your place.
+
+### PWA: Service worker offline shell (follow-on to manifest)
+Once the web manifest lands, add a minimal service worker (Cache API, cache-first for the app shell) so the app works offline. Keeps the run focused — manifest first, SW second.
+
+### UX: Chapter-level progress ring in Library tab
+The Library tab shows chapters but no visual indication of how many exercises per chapter have been completed. Adding a small SVG progress ring next to each chapter title (calculated from `mlhub.progress.v1`) would give learners a map of where they stand.
+
+---
+
+## Completed
+
+### [DONE 2026-06-07T07:09Z] UX: Active tab indicator persists across page load — completed (mlhub.view.v1)
+### [DONE 2026-06-07T06:09Z] BUG/UX: CodeMirror mobile scroll-into-view on focus — completed (focusin + 300ms delay)
+### [DONE 2026-06-07T05:08Z] CONTENT: ch24 batch prediction + model metadata — completed
+### [DONE 2026-06-07T04:10Z] BUG: run() concurrent-call guard (if running return) — completed
+### [DONE 2026-06-07T03:08Z] UX: Ctrl+Enter / Cmd+Enter shortcut — completed
+### [DONE 2026-06-07T02:06Z] MOBILE: CodeMirror font-size 16px to prevent iOS zoom — completed
+### [DONE 2026-06-07T01:08Z] MOBILE: Header tab nav scrollable on ≤640px, 44px touch targets — completed
+### [DONE 2026-06-07T00:00Z] CONTENT: ch13-kernel-rbf-04, ch15-gini-impurity-04 — completed
