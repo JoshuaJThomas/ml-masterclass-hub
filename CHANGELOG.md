@@ -1,5 +1,7 @@
 ## Changelog
 
+- 2026-06-07: gardener fixed CodeMirror font-size to 16px — prevents iOS Safari auto-zoom on mobile
+
 - 2026-06-07: gardener added 2 verified exercises (ch13-kernel-rbf-04, ch15-gini-impurity-04)
 
 - 2026-06-04: nightly gardener — add 3 verified exercises (ch06-rolling-mean-05, ch18-tfidf-score-04, ch21-average-linkage-04)

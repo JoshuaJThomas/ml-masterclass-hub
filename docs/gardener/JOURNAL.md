@@ -38,3 +38,20 @@
 **Outcome:** App-code change — both npm test and npm run build passed — auto-merged (see PR)
 
 **New backlog ideas added:** Practice/SQL mobile overflow audit; sticky bottom nav consideration; persist active tab in localStorage
+
+---
+
+## 2026-06-07T02:06Z
+
+**Focus:** Mobile UX — fix CodeMirror editor font-size to prevent iOS Safari auto-zoom
+
+**Changes:**
+- `src/lib/components/CodeEditor.svelte`: changed `fontSize: '14px'` → `fontSize: '16px'` in the CodeMirror hostTheme. iOS Safari auto-zooms any input/interactive element with font-size < 16px; this prevents that jarring UX on the Practice, Learn, SQL, and Library tabs.
+
+**Test+build:** 19 files / 70 tests passed; build succeeded (benign 626KB chunk warning); Bank valid: 160 questions
+
+**Browser smoke:** browser unavailable (Chromium apt deps blocked in env)
+
+**Outcome:** App-code change — both npm test and npm run build passed — auto-merged (see PR)
+
+**New backlog ideas added:** see BACKLOG.md
