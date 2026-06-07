@@ -2,6 +2,29 @@
 
 ---
 
+## 2026-06-07T04:10Z
+
+**Focus:** Bug fix — guard `run()` against concurrent Ctrl+Enter calls
+
+**Chosen because:** Highest-priority actionable bug in backlog: the Ctrl+Enter keyboard shortcut (added in run 03:08Z) bypasses the `disabled={running}` guard on the Run button, allowing rapid keystrokes to queue multiple concurrent async pyodide/SQL calls. The button UI correctly disables, but the keymap path did not.
+
+**Changes:**
+- `src/lib/views/Practice.svelte`: added `if (running) return;` at top of `run()` (line 80)
+- `src/lib/views/Learn.svelte`: added `if (running) return;` at top of `run()` (line 55)
+- `src/lib/views/Sql.svelte`: added `if (running) return;` at top of `run()` (line 59)
+
+The guard makes each `run()` function idempotent: the first in-flight call holds the lock; any subsequent call (from keyboard shortcut or button double-click) is a no-op until `finally` releases it.
+
+**Test+build:** 19 files / 70 tests passed; build succeeded (benign 626KB chunk warning)
+
+**Browser smoke:** browser unavailable (Playwright installed but Chromium apt deps failed in env)
+
+**Outcome:** App-code change — both npm test and npm run build passed — auto-merged (see PR)
+
+**New backlog ideas added:** see BACKLOG.md
+
+---
+
 ## 2026-06-07T00:00Z
 
 **Focus:** Content — add 2 exercises to thinnest chapters (ch13 and ch15, each had only 3 questions)
