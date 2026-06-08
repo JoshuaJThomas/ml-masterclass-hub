@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#863bff" />
+    <title>Offline — ML Masterclass</title>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: #f8f9fa;
+        color: #1a1a2e;
+        padding: 2rem;
+        text-align: center;
+      }
+      .icon {
+        font-size: 3.5rem;
+        margin-bottom: 1.25rem;
+        line-height: 1;
+      }
+      h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #863bff;
+        margin-bottom: 0.75rem;
+      }
+      p {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #555;
+        max-width: 340px;
+        margin-bottom: 1.75rem;
+      }
+      button {
+        background: #863bff;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 1.75rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        min-height: 44px;
+      }
+      button:active { opacity: 0.85; }
+    </style>
+  </head>
+  <body>
+    <div class="icon">📡</div>
+    <h1>You're offline</h1>
+    <p>Please reconnect to the internet to continue practising. Your progress is saved locally and will be waiting when you return.</p>
+    <button onclick="window.location.reload()">Try again</button>
+  </body>
+</html>
