@@ -23,12 +23,26 @@ export const tokens = {
     'on-primary': '#ffffff',
     'on-dark': '#ffffff',
     error: '#b30000',
+    // Wave 1 — gamification accents + warm playful surfaces
+    'xp-gold': '#e0962b',
+    'streak-flame': '#ff6a3d',
+    win: '#2fb86b',
+    'win-soft': '#e7f8ee',
+    surface: '#faf7f2',
+    'surface-2': '#f1ece3',
+    'tab-active': '#ff7759',
   },
   radius: {
     xs: '4px', sm: '8px', md: '16px', lg: '22px', xl: '30px', pill: '32px', full: '9999px',
   },
   space: {
     xxs: '2px', xs: '6px', sm: '8px', md: '12px', lg: '16px', xl: '24px', xxl: '32px', section: '80px',
+  },
+  shadow: {
+    sm: '0 1px 2px rgba(23,23,28,0.06)',
+    md: '0 6px 18px rgba(23,23,28,0.08)',
+    lg: '0 16px 40px rgba(23,23,28,0.12)',
+    pop: '0 10px 24px rgba(255,119,89,0.30)',
   },
   font: {
     display: "'Space Grotesk', 'Inter', ui-sans-serif, system-ui, sans-serif",
@@ -49,6 +63,7 @@ export function cssVars() {
     emit('color', tokens.colors),
     emit('radius', tokens.radius),
     emit('space', tokens.space),
+    emit('shadow', tokens.shadow),
     `  --font-display: ${tokens.font.display};`,
     `  --font-body: ${tokens.font.body};`,
     `  --font-mono: ${tokens.font.mono};`,
