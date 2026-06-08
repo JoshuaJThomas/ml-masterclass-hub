@@ -6,9 +6,6 @@ Prioritized list of improvements for future runs. Remove items when completed.
 
 ## High Priority
 
-### PWA: Service worker cache versioning on deploy
-The current service worker uses a hardcoded cache name `ml-hub-v1`. When assets change (new build), the service worker needs a new cache name to evict stale content. Consider either: (a) injecting a build timestamp into `sw.js` via a Vite plugin (e.g. vite-plugin-replace) or (b) adding a simple version comment that the gardener bumps when making app-code changes. Without this, users may see stale assets after a deploy.
-
 ### UX: Install prompt / "Add to Home Screen" banner
 After the manifest lands, trigger the browser's beforeinstallprompt event and show a subtle dismissible banner ("Install ML Hub on your home screen") at the top of the app. Store dismissal in localStorage so it doesn't repeat. Reinforces the PWA investment.
 
@@ -86,10 +83,20 @@ Once the web manifest lands, add a minimal service worker (Cache API, cache-firs
 ### UX: Chapter-level progress ring in Library tab
 The Library tab shows chapters but no visual indication of how many exercises per chapter have been completed. Adding a small SVG progress ring next to each chapter title (calculated from `mlhub.progress.v1`) would give learners a map of where they stand.
 
+### PWA: Add cache-bust test to validate-bank or a new smoke test
+Now that `scripts/patch-sw.js` runs at build time, add a lightweight test that confirms: (a) `dist/sw.js` exists after build, (b) `ml-hub-BUILD` does NOT appear in `dist/sw.js` (i.e. the placeholder was replaced), and (c) `ml-hub-` + 14 digits IS present. Can live in `scripts/validate-sw.js` and be called from the `build` npm script or a separate `validate-sw` script.
+
+### UX: Streak counter on Progress tab
+The Progress tab shows completed-count but no streak. Derive the current daily streak from `mlhub.activity.v1` (which already stores per-day activity) and show a "🔥 3-day streak" badge. Encourages daily habit. Self-contained read from existing localStorage key — no schema change needed.
+
+### CONTENT: ch07 — Cohen's kappa statistic exercise
+ch07 (classification metrics) has 5 questions. Not yet covered: Cohen's kappa κ = (p_o − p_e)/(1 − p_e) where p_o = observed agreement and p_e = expected agreement under chance. Self-contained numpy, unique topic, fits ch07 theme. One new medium exercise.
+
 ---
 
 ## Completed
 
+### [DONE 2026-06-08T04:09Z] PWA: SW cache versioning — scripts/patch-sw.js injects UTC timestamp into dist/sw.js at build time; package.json build script updated
 ### [DONE 2026-06-08T03:09Z] CONTENT: ch07-balanced-accuracy-05, ch10-l2-gradient-05 — completed
 ### [DONE 2026-06-08T02:08Z] PWA: Service worker (public/sw.js) — stale-while-revalidate, pre-caches app shell, registered in index.html
 ### [DONE 2026-06-08T01:09Z] PWA: Web manifest + PNG icons + Apple meta tags — completed (manifest.json, icons/icon-192.png, icons/icon-512.png, index.html)

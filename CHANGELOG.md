@@ -1,5 +1,7 @@
 ## Changelog
 
+- 2026-06-08: gardener — PWA SW cache versioning: inject UTC build timestamp into dist/sw.js via scripts/patch-sw.js so each deploy gets a unique cache name, enabling correct stale-asset eviction on activate
+
 - 2026-06-08: gardener added PWA web manifest — manifest.json, 192/512px icons, theme-color meta, Apple touch icon meta tags for installability on mobile home screens
 
 - 2026-06-07: gardener added CodeMirror mobile scroll-into-view on focus — editor scrolls above virtual keyboard when tapped on iOS/Android
