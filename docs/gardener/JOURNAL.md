@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-06-08T05:08Z
+
+**Focus:** PWA — offline fallback page (`public/offline.html`)
+
+**Chosen because:** Top High Priority backlog item. The service worker was already stale-while-revalidate, but when a navigation request failed and nothing was in cache (e.g. user opens the app for the first time with no connection, or cache was cleared), the SW let the response fall through as `undefined`, resulting in a bare browser error page. This completes the PWA offline story: manifest → SW → offline fallback.
+
+**Changes:**
+- `public/offline.html`: new branded offline page — emoji icon, "You're offline" heading in brand purple (#863bff), reassurance that localStorage progress is safe, "Try again" button (`window.location.reload()`). No external dependencies; styled inline to guarantee it works without network. Min-height 100dvh, system font stack, 44px touch-friendly button.
+- `public/sw.js`: added `/offline.html` to PRECACHE array so it's cached at install time. In the fetch handler's `.catch()`, changed the fallback from `() => cached` to a function that: (1) returns `cached` if present, (2) for `mode === 'navigate'` requests (page loads) with no cache, returns `caches.match('/offline.html')`, (3) otherwise returns `cached` (undefined for sub-resources — let the browser handle it normally).
+
+**Test+build:** 19 files / 70 tests passed; build succeeded (benign 627KB chunk warning); `dist/offline.html` present; `dist/sw.js` verified with `/offline.html` in PRECACHE and navigate fallback line.
+
+**Browser smoke:** browser unavailable (Chromium apt deps blocked in env)
+
+**Outcome:** App-code change — both npm test and npm run build passed — auto-merged (see PR)
+
+**New backlog ideas added:** see BACKLOG.md
+
+---
+
 ## 2026-06-08T04:09Z
 
 **Focus:** PWA — service worker cache versioning via build-time timestamp injection

@@ -9,9 +9,6 @@ Prioritized list of improvements for future runs. Remove items when completed.
 ### UX: Install prompt / "Add to Home Screen" banner
 After the manifest lands, trigger the browser's beforeinstallprompt event and show a subtle dismissible banner ("Install ML Hub on your home screen") at the top of the app. Store dismissal in localStorage so it doesn't repeat. Reinforces the PWA investment.
 
-### PWA: Offline fallback page
-Add a `public/offline.html` that the service worker serves when navigation fails (no network, no cache). A simple "You're offline — please reconnect to continue practising" message. Tiny file, clean UX.
-
 ### UX: Show Ctrl+Enter / Cmd+Enter hint tooltip near the Run button
 Now that the keyboard shortcut works, surface it to users: add a `title` attribute to the Run button (e.g. `title="Run (Ctrl+Enter)"`) so hovering shows the hint. Small, reinforces discoverability.
 
@@ -92,10 +89,20 @@ The Progress tab shows completed-count but no streak. Derive the current daily s
 ### CONTENT: ch07 — Cohen's kappa statistic exercise
 ch07 (classification metrics) has 5 questions. Not yet covered: Cohen's kappa κ = (p_o − p_e)/(1 − p_e) where p_o = observed agreement and p_e = expected agreement under chance. Self-contained numpy, unique topic, fits ch07 theme. One new medium exercise.
 
+### PWA: Offline page should list cached chapters/exercises count
+Enhance `public/offline.html` with a small inline `<script>` that reads `mlhub.progress.v1` from localStorage and shows a count of completed exercises ("You've completed X exercises so far") — useful reassurance while offline and a reminder that progress is safe. Zero network dependency; pure localStorage.
+
+### UX: "Back to top" button on Library tab
+The Library tab lists 24 chapters and gets long on mobile. A small fixed-position "↑ Top" button that appears after scrolling down (using IntersectionObserver on the first chapter card) would let users jump back without friction. Tiny, focused change: ~20 lines in Library.svelte.
+
+### CONTENT: ch05 exercises — Naive Bayes log-likelihood
+ch05 covers probability fundamentals. Not yet covered: log-likelihood computation for Naive Bayes: sum log P(xi|y) across features. Self-contained numpy, unique topic not in bank. One new medium exercise.
+
 ---
 
 ## Completed
 
+### [DONE 2026-06-08T05:08Z] PWA: Offline fallback page — public/offline.html + SW navigate fallback — completed
 ### [DONE 2026-06-08T04:09Z] PWA: SW cache versioning — scripts/patch-sw.js injects UTC timestamp into dist/sw.js at build time; package.json build script updated
 ### [DONE 2026-06-08T03:09Z] CONTENT: ch07-balanced-accuracy-05, ch10-l2-gradient-05 — completed
 ### [DONE 2026-06-08T02:08Z] PWA: Service worker (public/sw.js) — stale-while-revalidate, pre-caches app shell, registered in index.html
