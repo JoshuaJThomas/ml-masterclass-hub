@@ -6,8 +6,14 @@ Prioritized list of improvements for future runs. Remove items when completed.
 
 ## High Priority
 
-### PWA: Web manifest + service worker for installability
-Add a `manifest.json` (name, icons, display:standalone, theme_color) and a minimal service worker that caches the app shell for offline use. This makes the app installable on mobile home screens. Mobile polish is well-advanced now — this is the next logical step.
+### PWA: Service worker for offline shell (follow-on to manifest)
+Manifest landed (2026-06-08). Now add a minimal Workbox-free service worker: on install, cache the app shell (index.html, CSS, JS bundle); on fetch, serve from cache-first. This makes the app work offline and removes the final installability gap. Small, self-contained — register in index.html, add `public/sw.js`.
+
+### UX: Install prompt / "Add to Home Screen" banner
+After the manifest lands, trigger the browser's beforeinstallprompt event and show a subtle dismissible banner ("Install ML Hub on your home screen") at the top of the app. Store dismissal in localStorage so it doesn't repeat. Reinforces the PWA investment.
+
+### PWA: Offline fallback page
+Add a `public/offline.html` that the service worker serves when navigation fails (no network, no cache). A simple "You're offline — please reconnect to continue practising" message. Tiny file, clean UX.
 
 ### CONTENT: Add exercises to ch07 (4 questions) — precision and recall
 ch07 covers classification metrics. Not yet covered: precision, recall, F1 score from raw TP/FP/FN/TN counts using numpy (no sklearn). 2 exercises would bring ch07 in line with better-covered chapters.
@@ -78,6 +84,7 @@ The Library tab shows chapters but no visual indication of how many exercises pe
 
 ## Completed
 
+### [DONE 2026-06-08T01:09Z] PWA: Web manifest + PNG icons + Apple meta tags — completed (manifest.json, icons/icon-192.png, icons/icon-512.png, index.html)
 ### [DONE 2026-06-07T07:09Z] UX: Active tab indicator persists across page load — completed (mlhub.view.v1)
 ### [DONE 2026-06-07T06:09Z] BUG/UX: CodeMirror mobile scroll-into-view on focus — completed (focusin + 300ms delay)
 ### [DONE 2026-06-07T05:08Z] CONTENT: ch24 batch prediction + model metadata — completed
