@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-06-08T02:08Z
+
+**Focus:** PWA — minimal Workbox-free service worker for offline shell
+
+**Chosen because:** Highest-priority backlog item; direct follow-on to the web manifest that landed last run (2026-06-08T01:09Z). The app was already installable but had no offline capability. The service worker completes the core PWA story.
+
+**Changes:**
+- `public/sw.js`: created — stale-while-revalidate strategy. On `install`: pre-caches `['/', '/manifest.json', '/icons/icon-192.png', '/icons/icon-512.png']` and calls `skipWaiting()`. On `activate`: evicts all old caches (those not named `ml-hub-v1`) and calls `clients.claim()`. On `fetch`: same-origin GET requests only — returns cached response immediately if present (stale), simultaneously fetches from network and updates cache in background (while-revalidate). Cross-origin requests (Pyodide CDN) are passed through unmodified.
+- `index.html`: added inline `<script>` that registers `/sw.js` on `window load` using the standard `'serviceWorker' in navigator` feature-detect guard.
+
+**Test+build:** 19 files / 70 tests passed; Bank valid: 162 questions across chapters 1-24; SQL bank valid: 14 questions; Lessons valid: 32; build succeeded (benign 627KB chunk warning); `dist/sw.js` present in build output.
+
+**Browser smoke:** browser unavailable (Chromium apt deps blocked in env)
+
+**Outcome:** App-code change — both npm test and npm run build passed — auto-merged (see PR below)
+
+**New backlog ideas added:** see BACKLOG.md
+
+---
+
 ## 2026-06-08T01:09Z
 
 **Focus:** PWA — add web app manifest for mobile installability
