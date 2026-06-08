@@ -2,6 +2,28 @@
 
 ---
 
+## 2026-06-08T01:09Z
+
+**Focus:** PWA — add web app manifest for mobile installability
+
+**Chosen because:** Top High Priority backlog item. The manifest is the first, self-contained step toward making the app installable on mobile home screens (service worker is the follow-on). Mobile polish is now well advanced (tab nav, font-size, scroll-into-view, CodeMirror focus); making the app installable is the logical next step.
+
+**Changes:**
+- `public/manifest.json`: created — name "ML Masterclass", short_name "ML Hub", display:standalone, background_color:#ffffff, theme_color:#863bff (brand purple from favicon); icons: icon-192.png, icon-512.png (any maskable), and favicon.svg (any).
+- `public/icons/icon-192.png`: generated with Python/Pillow — 192×192, brand-purple background (#863bff), white lightning-bolt polygon echoing the favicon shape.
+- `public/icons/icon-512.png`: same design at 512×512.
+- `index.html`: added `<link rel="manifest" href="/manifest.json">`, `<meta name="theme-color" content="#863bff">`, three Apple-specific meta tags (`apple-mobile-web-app-capable`, `apple-mobile-web-app-status-bar-style`, `apple-mobile-web-app-title`), and `<link rel="apple-touch-icon" href="/icons/icon-192.png">` for iOS installability.
+
+**Test+build:** 19 files / 70 tests passed; Bank valid: 162 questions across chapters 1-24; SQL bank valid: 14 questions; Lessons valid: 32; build succeeded (benign 627KB chunk warning)
+
+**Browser smoke:** browser unavailable (Chromium apt deps blocked in env)
+
+**Outcome:** App-code change — both npm test and npm run build passed — auto-merged (see PR below)
+
+**New backlog ideas added:** see BACKLOG.md
+
+---
+
 ## 2026-06-07T07:09Z
 
 **Focus:** UX — persist active tab across page reload (localStorage)
