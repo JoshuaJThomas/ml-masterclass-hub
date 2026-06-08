@@ -6,8 +6,8 @@ Prioritized list of improvements for future runs. Remove items when completed.
 
 ## High Priority
 
-### PWA: Service worker for offline shell (follow-on to manifest)
-Manifest landed (2026-06-08). Now add a minimal Workbox-free service worker: on install, cache the app shell (index.html, CSS, JS bundle); on fetch, serve from cache-first. This makes the app work offline and removes the final installability gap. Small, self-contained — register in index.html, add `public/sw.js`.
+### PWA: Service worker cache versioning on deploy
+The current service worker uses a hardcoded cache name `ml-hub-v1`. When assets change (new build), the service worker needs a new cache name to evict stale content. Consider either: (a) injecting a build timestamp into `sw.js` via a Vite plugin (e.g. vite-plugin-replace) or (b) adding a simple version comment that the gardener bumps when making app-code changes. Without this, users may see stale assets after a deploy.
 
 ### UX: Install prompt / "Add to Home Screen" banner
 After the manifest lands, trigger the browser's beforeinstallprompt event and show a subtle dismissible banner ("Install ML Hub on your home screen") at the top of the app. Store dismissal in localStorage so it doesn't repeat. Reinforces the PWA investment.
@@ -62,6 +62,12 @@ The Practice and Learn containers use `var(--space-xxl)` (32px) vertical padding
 ### A11Y: Add aria-label to CodeMirror editor host
 The CodeMirror editor host `<div>` has no accessible label, so screen readers announce only a generic "application" role. Add `aria-label="Python code editor"` (or "SQL code editor" when lang='sql') to the `.editor-host` element so assistive technology announces the editor's purpose.
 
+### PWA: Show update-available toast when service worker finds new content
+When the SW finishes updating the cache in the background (stale-while-revalidate), the user is on an old version until they reload. Add a lightweight `controllerchange` listener in the SW registration script: when a new SW takes control, show a small dismissible toast ("Update available — reload to refresh") that calls `window.location.reload()` on click. Requires ~15 lines of JS in the registration block, no new files.
+
+### CONTENT: Add exercises to ch07 — F1 score and ROC-AUC from scratch
+ch07 (classification metrics) currently has 4 questions. Not yet covered: F1 score = 2*P*R/(P+R) from raw TP/FP/FN, and trapezoidal ROC-AUC from TPR/FPR arrays using numpy. Both are self-contained (no sklearn). Adding 2 exercises would bring ch07 up to 6 questions, in line with the best-covered chapters.
+
 ### MOBILE: Swipe gesture to navigate between exercises
 Consider adding touch swipe gestures (left/right) on the Practice and Learn panels to move next/prev exercise. Use Pointer Events API — no library needed. Small `pointerdown`/`pointerup` delta check in Practice.svelte and Learn.svelte.
 
@@ -84,6 +90,7 @@ The Library tab shows chapters but no visual indication of how many exercises pe
 
 ## Completed
 
+### [DONE 2026-06-08T02:08Z] PWA: Service worker (public/sw.js) — stale-while-revalidate, pre-caches app shell, registered in index.html
 ### [DONE 2026-06-08T01:09Z] PWA: Web manifest + PNG icons + Apple meta tags — completed (manifest.json, icons/icon-192.png, icons/icon-512.png, index.html)
 ### [DONE 2026-06-07T07:09Z] UX: Active tab indicator persists across page load — completed (mlhub.view.v1)
 ### [DONE 2026-06-07T06:09Z] BUG/UX: CodeMirror mobile scroll-into-view on focus — completed (focusin + 300ms delay)

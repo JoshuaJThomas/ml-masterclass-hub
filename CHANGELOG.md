@@ -30,3 +30,4 @@
 - 2026-06-07: gardener added mobile nav — header scrollable on ≤640px, 44px touch targets, version hidden
 - Ctrl+Enter / Cmd+Enter keyboard shortcut triggers Run in Practice, Learn, and SQL tabs (CodeEditor Mod-Enter keymap)
 - 2026-06-07: gardener — persist active tab to localStorage (mlhub.view.v1) so reload returns to last-visited tab
+- 2026-06-08: gardener — PWA service worker (public/sw.js): stale-while-revalidate, pre-caches app shell, offline fallback
