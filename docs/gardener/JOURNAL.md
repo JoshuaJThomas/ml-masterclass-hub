@@ -2,6 +2,27 @@
 
 ---
 
+## 2026-06-08T03:09Z
+
+**Focus:** Content — add 2 exercises to ch07 and ch10 (thinnest chapters, each had 4 questions)
+
+**Chosen because:** 4 non-content runs since last content run (2026-06-07T05:08Z). Rule says prefer content after ~3 non-content runs. Highest-priority CONTENT item was ch07 (precision/recall backlog note), but precision/recall/F1 topics are already covered in ch17. Instead added novel non-duplicate topics: "balanced accuracy" to ch07 and "L2 regularization gradient" to ch10.
+
+**Changes:**
+- Added `ch07-balanced-accuracy-05`: balanced accuracy = (sensitivity + specificity) / 2 — handles class imbalance by averaging per-class recall rates (medium). Data designed so balanced_acc (0.6875) differs from regular accuracy (0.75) to ensure discriminant check works.
+- Added `ch10-l2-gradient-05`: L2-regularized gradient = grad + 2 * lam * w — core formula used in Ridge regression gradient descent (medium). Both the solution and a naive "return grad" were verified to pass/fail the check correctly.
+- Updated `public/bank/meta.json`: `generatedAt` → `2026-06-08`
+
+**Test+build:** 19 files / 70 tests passed; `Bank valid: 164 questions across chapters 1-24`; build succeeded (benign 627KB chunk warning)
+
+**Browser smoke:** browser unavailable (Chromium apt deps blocked in env)
+
+**Outcome:** Content-only change — bank validator passed — auto-merged (see PR)
+
+**New backlog ideas added:** see BACKLOG.md
+
+---
+
 ## 2026-06-08T02:08Z
 
 **Focus:** PWA — minimal Workbox-free service worker for offline shell

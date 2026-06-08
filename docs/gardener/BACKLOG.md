@@ -15,9 +15,6 @@ After the manifest lands, trigger the browser's beforeinstallprompt event and sh
 ### PWA: Offline fallback page
 Add a `public/offline.html` that the service worker serves when navigation fails (no network, no cache). A simple "You're offline — please reconnect to continue practising" message. Tiny file, clean UX.
 
-### CONTENT: Add exercises to ch07 (4 questions) — precision and recall
-ch07 covers classification metrics. Not yet covered: precision, recall, F1 score from raw TP/FP/FN/TN counts using numpy (no sklearn). 2 exercises would bring ch07 in line with better-covered chapters.
-
 ### UX: Show Ctrl+Enter / Cmd+Enter hint tooltip near the Run button
 Now that the keyboard shortcut works, surface it to users: add a `title` attribute to the Run button (e.g. `title="Run (Ctrl+Enter)"`) so hovering shows the hint. Small, reinforces discoverability.
 
@@ -28,8 +25,8 @@ Now that the keyboard shortcut works, surface it to users: add a `title` attribu
 ### CONTENT: Add exercises to ch24 — normalization pipeline (1 remaining)
 ch24 now has 5 questions. One backlog topic remains: input normalization pipeline (apply train-fitted mean/std to test data using numpy). This is the last uncovered ch24 topic from the original list.
 
-### CONTENT: ch10 exercises (4 questions — joint-thinnest)
-ch10 covers regularization (L1/L2 penalties). Not yet covered: manual L2 penalty gradient (add lambda*w to gradient), L1 sparse-solution check (soft-thresholding). Add 2 new exercises.
+### CONTENT: ch10 exercises — L1 soft-thresholding (1 remaining)
+ch10 now has 5 questions. Still uncovered: L1 (Lasso) soft-thresholding: `sign(w) * max(|w| - lam, 0)`. Self-contained numpy, 1 new exercise.
 
 ### UX: Reset code to starterCode button
 Add a small "Reset code" button (or link) below each editor that restores `code` to `current.starterCode`. Useful when a learner has mangled the starter code and wants a clean slate. Small, self-contained — one button + one line in Practice.svelte and Learn.svelte.
@@ -65,8 +62,11 @@ The CodeMirror editor host `<div>` has no accessible label, so screen readers an
 ### PWA: Show update-available toast when service worker finds new content
 When the SW finishes updating the cache in the background (stale-while-revalidate), the user is on an old version until they reload. Add a lightweight `controllerchange` listener in the SW registration script: when a new SW takes control, show a small dismissible toast ("Update available — reload to refresh") that calls `window.location.reload()` on click. Requires ~15 lines of JS in the registration block, no new files.
 
+### CONTENT: Add exercises to ch07 — further classification metrics
+ch07 (classification metrics) now has 5 questions. Not yet covered in ch07 specifically: top-K accuracy for multi-class problems, and Cohen's kappa statistic (kappa = (p_o - p_e)/(1 - p_e)). Both are unique topics not yet in the bank and fit ch07's theme.
+
 ### CONTENT: Add exercises to ch07 — F1 score and ROC-AUC from scratch
-ch07 (classification metrics) currently has 4 questions. Not yet covered: F1 score = 2*P*R/(P+R) from raw TP/FP/FN, and trapezoidal ROC-AUC from TPR/FPR arrays using numpy. Both are self-contained (no sklearn). Adding 2 exercises would bring ch07 up to 6 questions, in line with the best-covered chapters.
+ch07 (classification metrics) currently has 5 questions. Not yet covered: F1 score = 2*P*R/(P+R) from raw TP/FP/FN, and trapezoidal ROC-AUC from TPR/FPR arrays using numpy. Both are self-contained (no sklearn).
 
 ### MOBILE: Swipe gesture to navigate between exercises
 Consider adding touch swipe gestures (left/right) on the Practice and Learn panels to move next/prev exercise. Use Pointer Events API — no library needed. Small `pointerdown`/`pointerup` delta check in Practice.svelte and Learn.svelte.
@@ -90,6 +90,7 @@ The Library tab shows chapters but no visual indication of how many exercises pe
 
 ## Completed
 
+### [DONE 2026-06-08T03:09Z] CONTENT: ch07-balanced-accuracy-05, ch10-l2-gradient-05 — completed
 ### [DONE 2026-06-08T02:08Z] PWA: Service worker (public/sw.js) — stale-while-revalidate, pre-caches app shell, registered in index.html
 ### [DONE 2026-06-08T01:09Z] PWA: Web manifest + PNG icons + Apple meta tags — completed (manifest.json, icons/icon-192.png, icons/icon-512.png, index.html)
 ### [DONE 2026-06-07T07:09Z] UX: Active tab indicator persists across page load — completed (mlhub.view.v1)

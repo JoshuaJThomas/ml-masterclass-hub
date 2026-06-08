@@ -1780,5 +1780,27 @@
     "hint": "Use a plain dict literal, then `sorted(model_metadata.keys())`.",
     "solution": "model_metadata = {\n    'name': 'linear_classifier',\n    'version': '1.0.0',\n    'n_features': 10,\n    'created_at': '2026-01-01'\n}\nresult = sorted(model_metadata.keys())",
     "difficulty": "easy"
+  },
+  {
+    "id": "ch07-balanced-accuracy-05",
+    "chapter": 7,
+    "topic": "balanced accuracy",
+    "prompt": "Balanced accuracy handles class imbalance by averaging the recall of each class. For binary labels in `y_true` and `y_pred`, compute:\n- sensitivity = TP / (TP + FN)  (recall for class 1)\n- specificity = TN / (TN + FP)  (recall for class 0)\nThen assign `result = (sensitivity + specificity) / 2`.",
+    "starterCode": "import numpy as np\ny_true = np.array([1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0])\ny_pred = np.array([1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1])\n# Assign to `result` the balanced accuracy\nresult = ...",
+    "check": "assert abs(result - 0.6875) < 1e-9",
+    "hint": "Compute TP, FN, TN, FP using boolean masks, then sensitivity = TP/(TP+FN), specificity = TN/(TN+FP).",
+    "solution": "import numpy as np\ny_true = np.array([1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0])\ny_pred = np.array([1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1])\ntp = int(((y_true == 1) & (y_pred == 1)).sum())\nfn = int(((y_true == 1) & (y_pred == 0)).sum())\ntn = int(((y_true == 0) & (y_pred == 0)).sum())\nfp = int(((y_true == 0) & (y_pred == 1)).sum())\nsensitivity = tp / (tp + fn)\nspecificity = tn / (tn + fp)\nresult = (sensitivity + specificity) / 2",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch10-l2-gradient-05",
+    "chapter": 10,
+    "topic": "L2 regularization gradient",
+    "prompt": "L2 regularization (Ridge) penalizes large weights. During gradient descent the regularized gradient is:\n  `grad_reg = grad + 2 * lam * w`\nGiven `grad` (the base gradient), `w` (current weights), and `lam` (regularization strength), compute the regularized gradient and assign to `result`.",
+    "starterCode": "import numpy as np\ngrad = np.array([0.3, -0.5, 0.1, -0.2])\nw = np.array([1.5, -0.8, 2.0, 0.4])\nlam = 0.01\n# Assign to `result` the L2-regularized gradient\nresult = ...",
+    "check": "assert np.allclose(result, np.array([0.33, -0.516, 0.14, -0.192]), atol=1e-9)",
+    "hint": "Add the penalty term `2 * lam * w` element-wise to `grad`.",
+    "solution": "import numpy as np\ngrad = np.array([0.3, -0.5, 0.1, -0.2])\nw = np.array([1.5, -0.8, 2.0, 0.4])\nlam = 0.01\nresult = grad + 2 * lam * w",
+    "difficulty": "medium"
   }
 ]
