@@ -2,6 +2,27 @@
 
 ---
 
+## 2026-06-08T04:09Z
+
+**Focus:** PWA — service worker cache versioning via build-time timestamp injection
+
+**Chosen because:** Top High Priority backlog item. `CACHE = 'ml-hub-v1'` was hardcoded in `public/sw.js`. The SW activate handler deletes caches that don't match `CACHE`; since the name never changed across deploys, old stale assets were never evicted. After a Vite deploy with new asset hashes, users could get old assets indefinitely. Fix: placeholder `ml-hub-BUILD` in `public/sw.js`, replaced at build time with UTC timestamp (`ml-hub-YYYYMMDDHHmmss`) by a new post-build Node script.
+
+**Changes:**
+- `public/sw.js`: changed `const CACHE = 'ml-hub-v1'` to `const CACHE = 'ml-hub-BUILD'` with explanatory comment. The placeholder gets replaced at build time; in dev mode `ml-hub-BUILD` is used (benign — dev SW isn't used for production caching).
+- `scripts/patch-sw.js`: new ~15-line ESM script — reads `dist/sw.js`, calls `replaceAll('ml-hub-BUILD', 'ml-hub-<timestamp>')`, writes back, exits 1 if placeholder missing (build-fail safety). Logs the versioned cache name.
+- `package.json`: changed `"build": "vite build"` → `"build": "vite build && node scripts/patch-sw.js"` so every production build auto-patches the SW.
+
+**Test+build:** 19 files / 70 tests passed; Bank valid: 164 questions across chapters 1-24; build succeeded (benign 627KB chunk warning); `patch-sw: cache versioned as ml-hub-20260608040943` confirmed in build output; `dist/sw.js` verified with correct timestamp in both comment and CACHE constant.
+
+**Browser smoke:** browser unavailable (Chromium apt deps blocked in env)
+
+**Outcome:** App-code change — both npm test and npm run build passed — auto-merged (see PR)
+
+**New backlog ideas added:** see BACKLOG.md
+
+---
+
 ## 2026-06-08T03:09Z
 
 **Focus:** Content — add 2 exercises to ch07 and ch10 (thinnest chapters, each had 4 questions)

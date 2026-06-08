@@ -1,4 +1,5 @@
-const CACHE = 'ml-hub-v1';
+// ml-hub-BUILD is replaced by scripts/patch-sw.js at build time with a UTC timestamp
+const CACHE = 'ml-hub-BUILD';
 const PRECACHE = ['/', '/manifest.json', '/icons/icon-192.png', '/icons/icon-512.png'];
 
 self.addEventListener('install', evt => {
