@@ -31,3 +31,4 @@
 - Ctrl+Enter / Cmd+Enter keyboard shortcut triggers Run in Practice, Learn, and SQL tabs (CodeEditor Mod-Enter keymap)
 - 2026-06-07: gardener — persist active tab to localStorage (mlhub.view.v1) so reload returns to last-visited tab
 - 2026-06-08: gardener — PWA service worker (public/sw.js): stale-while-revalidate, pre-caches app shell, offline fallback
+- 2026-06-08: gardener — added ch07-balanced-accuracy-05 (balanced accuracy) and ch10-l2-gradient-05 (L2 regularization gradient)
