@@ -1,32 +1,35 @@
 <script>
   import Header from './lib/components/Header.svelte';
+  import BottomTabBar from './lib/components/BottomTabBar.svelte';
   import Learn from './lib/views/Learn.svelte';
   import Practice from './lib/views/Practice.svelte';
   import Progress from './lib/views/Progress.svelte';
   import Sql from './lib/views/Sql.svelte';
   import Library from './lib/views/Library.svelte';
   import { view } from './lib/stores/view.js';
+  import { fly } from 'svelte/transition';
 </script>
 
 <Header />
 <main>
-  {#if $view === 'learn'}
-    <Learn />
-  {:else if $view === 'practice'}
-    <Practice />
-  {:else if $view === 'sql'}
-    <Sql />
-  {:else if $view === 'library'}
-    <Library />
-  {:else}
-    <Progress />
-  {/if}
+  {#key $view}
+    <div class="view" in:fly={{ y: 10, duration: 200 }}>
+      {#if $view === 'learn'}
+        <Learn />
+      {:else if $view === 'practice'}
+        <Practice />
+      {:else if $view === 'sql'}
+        <Sql />
+      {:else if $view === 'library'}
+        <Library />
+      {:else}
+        <Progress />
+      {/if}
+    </div>
+  {/key}
 </main>
-<footer class="container">
-  <span class="micro">Personal ML learning hub · built with Claude</span>
-</footer>
+<BottomTabBar />
 
 <style>
-  main { min-height: 70vh; }
-  footer { padding: var(--space-xl) 0; border-top: 1px solid var(--color-hairline); margin-top: var(--space-section); }
+  main { min-height: 70vh; padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
 </style>
