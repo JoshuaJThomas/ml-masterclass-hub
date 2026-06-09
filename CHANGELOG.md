@@ -1,5 +1,7 @@
 ## Changelog
 
+- 2026-06-09: gardener — Content: add ch10-l1-softthreshold-06 (L1 soft-thresholding) and ch24-normalization-06 (train-fitted normalization pipeline); bank at 166 questions
+
 - 2026-06-09: gardener — UX: add title="Run (Ctrl+Enter)" to Run button in Practice, Learn, and SQL tabs for keyboard-shortcut discoverability
 
 - 2026-06-08: gardener — PWA SW cache versioning: inject UTC build timestamp into dist/sw.js via scripts/patch-sw.js so each deploy gets a unique cache name, enabling correct stale-asset eviction on activate

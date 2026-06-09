@@ -13,11 +13,11 @@ After the manifest lands, trigger the browser's beforeinstallprompt event and sh
 
 ## Medium Priority
 
-### CONTENT: Add exercises to ch24 — normalization pipeline (1 remaining)
-ch24 now has 5 questions. One backlog topic remains: input normalization pipeline (apply train-fitted mean/std to test data using numpy). This is the last uncovered ch24 topic from the original list.
+### CONTENT: Add exercises to ch05 — Naive Bayes log-likelihood
+ch05 covers probability fundamentals. Not yet covered: log-likelihood computation for Naive Bayes: sum log P(xi|y) across features. Self-contained numpy, unique topic not in bank. One new medium exercise.
 
-### CONTENT: ch10 exercises — L1 soft-thresholding (1 remaining)
-ch10 now has 5 questions. Still uncovered: L1 (Lasso) soft-thresholding: `sign(w) * max(|w| - lam, 0)`. Self-contained numpy, 1 new exercise.
+### CONTENT: Add exercises to ch07 — Cohen's kappa statistic
+ch07 has 5 questions. Not yet covered: Cohen's kappa κ = (p_o − p_e)/(1 − p_e). Self-contained numpy. One new medium exercise.
 
 ### UX: Reset code to starterCode button
 Add a small "Reset code" button (or link) below each editor that restores `code` to `current.starterCode`. Useful when a learner has mangled the starter code and wants a clean slate. Small, self-contained — one button + one line in Practice.svelte and Learn.svelte.
@@ -28,6 +28,15 @@ Add Alt+N / Alt+P (or similar) to move to the next/previous exercise without rea
 ---
 
 ## Low Priority
+
+### CONTENT: Add exercises to ch03 — broadcasting edge cases
+ch03 covers NumPy broadcasting. Currently no exercise tests the "trailing dimensions must match" rule with a 3D array or a case where broadcasting fails. One exercise: given two arrays of shapes (4,1,3) and (1,5,3), compute the element-wise product and verify the output shape is (4,5,3). Self-contained numpy, unique topic, medium difficulty.
+
+### UX: Show chapter count badge on Library tab chapter cards
+Each chapter card in the Library tab could show "N / M exercises completed" as a small badge (e.g. "3/7"), computed from `mlhub.progress.v1` and the questions bank. Gives learners an at-a-glance progress map without navigating to the Progress tab. ~15 lines in Library.svelte.
+
+### A11Y: aria-keyshortcuts on Run button (mobile screen reader hint)
+The `title` tooltip from the last run is invisible on touch screens. Add `aria-keyshortcuts="Control+Enter"` to the Run button in Practice.svelte, Learn.svelte, and Sql.svelte so screen readers announce the keyboard shortcut. Zero-risk, pure HTML attribute, 3 one-line changes.
 
 ### UI: Loading/empty states in Progress tab
 If localStorage has no data, the Progress tab may show blank or confusing UI. Add a friendly empty-state message and a call-to-action to start practising.
@@ -107,6 +116,7 @@ Add a small "Reset" link/button below each editor that restores `code` to `curre
 
 ## Completed
 
+### [DONE 2026-06-09T06:13Z] CONTENT: ch10-l1-softthreshold-06 (L1 soft-thresholding) + ch24-normalization-06 (train-fitted normalization pipeline) — bank at 166 questions
 ### [DONE 2026-06-09T01:09Z] UX: Run button title="Run (Ctrl+Enter)" — tooltip for keyboard shortcut discoverability in Practice, Learn, Sql
 ### [DONE 2026-06-08T05:08Z] PWA: Offline fallback page — public/offline.html + SW navigate fallback — completed
 ### [DONE 2026-06-08T04:09Z] PWA: SW cache versioning — scripts/patch-sw.js injects UTC timestamp into dist/sw.js at build time; package.json build script updated

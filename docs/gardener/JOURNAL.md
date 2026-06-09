@@ -2,6 +2,28 @@
 
 ---
 
+## 2026-06-09T06:13Z
+
+**Focus:** Content — add 2 exercises: ch10-l1-softthreshold-06 and ch24-normalization-06
+
+**Chosen because:** 3 consecutive non-content runs since last content run (2026-06-08T03:09Z) triggers the "PREFER content" rule. Two backlog items were explicitly listed as ready: ch10 L1 soft-thresholding (1 remaining) and ch24 normalization pipeline (1 remaining).
+
+**Changes:**
+- `public/bank/questions.json`: appended `ch10-l1-softthreshold-06` (L1 Lasso soft-thresholding: `sign(w) * max(|w|−lam, 0)`, medium) and `ch24-normalization-06` (train-fitted z-score normalization applied to test set, medium). Both solutions verified in a fresh Python namespace; wrong answers confirmed to fail the check.
+- `public/bank/meta.json`: `generatedAt` → `2026-06-09`
+- `CHANGELOG.md`: one-line entry
+- `docs/gardener/JOURNAL.md`: this entry
+- `docs/gardener/BACKLOG.md`: marked items completed, added 3 new ideas
+- `scripts/_add_questions.py`: temporary helper script used to append questions (can be deleted)
+
+**Test+build:** 19 files / 70 tests passed; Bank valid: 166 questions across chapters 1-24; SQL bank valid: 14 questions; Lessons valid: 32
+
+**Validator output:** `Bank valid: 166 questions across chapters 1-24.`
+
+**Outcome:** Content-only change — bank validator passed — AUTO-MERGED
+
+---
+
 ## 2026-06-09T01:09Z
 
 **Focus:** UX — add `title="Run (Ctrl+Enter)"` to the Run button in Practice, Learn, and SQL tabs

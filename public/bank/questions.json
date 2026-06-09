@@ -1802,5 +1802,27 @@
     "hint": "Add the penalty term `2 * lam * w` element-wise to `grad`.",
     "solution": "import numpy as np\ngrad = np.array([0.3, -0.5, 0.1, -0.2])\nw = np.array([1.5, -0.8, 2.0, 0.4])\nlam = 0.01\nresult = grad + 2 * lam * w",
     "difficulty": "medium"
+  },
+  {
+    "id": "ch10-l1-softthreshold-06",
+    "chapter": 10,
+    "topic": "L1 soft-thresholding",
+    "prompt": "L1 regularization (Lasso) uses the **soft-thresholding** proximal operator during coordinate descent. For each weight element:\n\n  `result = sign(w) * max(|w| - lam, 0)`\n\nGiven weight vector `w` and regularization strength `lam`, apply soft-thresholding element-wise and assign to `result`. Values smaller than `lam` in magnitude should shrink to exactly zero.",
+    "starterCode": "import numpy as np\nw = np.array([2.5, -1.0, 0.3, -0.5, 1.8])\nlam = 0.6\n# Apply soft-thresholding element-wise\nresult = ...",
+    "check": "import numpy as np\nassert result.shape == (5,), f\"Shape mismatch: {result.shape}\"\nassert np.allclose(result, np.array([1.9, -0.4, 0.0, 0.0, 1.2]), atol=1e-6), f\"Got {result}\"",
+    "hint": "Use `np.sign(w)` for the sign, `np.abs(w)` for magnitude, and `np.maximum(..., 0)` to clip negative values to zero.",
+    "solution": "import numpy as np\nw = np.array([2.5, -1.0, 0.3, -0.5, 1.8])\nlam = 0.6\nresult = np.sign(w) * np.maximum(np.abs(w) - lam, 0)",
+    "difficulty": "medium"
+  },
+  {
+    "id": "ch24-normalization-06",
+    "chapter": 24,
+    "topic": "normalization pipeline",
+    "prompt": "In a deployed ML pipeline, normalization parameters must be **fitted on training data only** and then applied to test data \u2014 never re-fitted on the test set.\n\nGiven `X_train` and `X_test`, compute the column-wise mean and std from `X_train`, then apply z-score normalization to `X_test` using those train statistics. Assign the normalized test matrix to `result`.",
+    "starterCode": "import numpy as np\nX_train = np.array([[2.0, 10.0], [4.0, 20.0], [6.0, 30.0], [8.0, 40.0]])\nX_test  = np.array([[3.0, 15.0], [7.0, 35.0]])\n# Fit mean and std on X_train, then normalize X_test\nresult = ...",
+    "check": "import numpy as np\nassert result.shape == (2, 2), f\"Expected shape (2, 2), got {result.shape}\"\nexpected = np.array([[-0.89442719, -0.89442719], [0.89442719, 0.89442719]])\nassert np.allclose(result, expected, atol=1e-4), f\"Got {result}\"",
+    "hint": "Compute `mean_ = X_train.mean(axis=0)` and `std_ = X_train.std(axis=0)`, then `result = (X_test - mean_) / std_`.",
+    "solution": "import numpy as np\nX_train = np.array([[2.0, 10.0], [4.0, 20.0], [6.0, 30.0], [8.0, 40.0]])\nX_test  = np.array([[3.0, 15.0], [7.0, 35.0]])\nmean_ = X_train.mean(axis=0)\nstd_  = X_train.std(axis=0)\nresult = (X_test - mean_) / std_",
+    "difficulty": "medium"
   }
 ]
