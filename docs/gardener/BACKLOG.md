@@ -9,9 +9,6 @@ Prioritized list of improvements for future runs. Remove items when completed.
 ### UX: Install prompt / "Add to Home Screen" banner
 After the manifest lands, trigger the browser's beforeinstallprompt event and show a subtle dismissible banner ("Install ML Hub on your home screen") at the top of the app. Store dismissal in localStorage so it doesn't repeat. Reinforces the PWA investment.
 
-### UX: Show Ctrl+Enter / Cmd+Enter hint tooltip near the Run button
-Now that the keyboard shortcut works, surface it to users: add a `title` attribute to the Run button (e.g. `title="Run (Ctrl+Enter)"`) so hovering shows the hint. Small, reinforces discoverability.
-
 ---
 
 ## Medium Priority
@@ -100,8 +97,17 @@ ch05 covers probability fundamentals. Not yet covered: log-likelihood computatio
 
 ---
 
+### UX: Keyboard shortcut tooltip in mobile — add aria-keyshortcuts attribute to Run button
+The `title` attribute works on desktop hover but is invisible on touch screens. Add `aria-keyshortcuts="Control+Enter"` to the Run button in Practice.svelte, Learn.svelte, and Sql.svelte. Screen readers will announce the shortcut, and it sets the stage for a future visible mobile hint.
+
+### UX: "Reset code" button on Practice and Learn tabs
+Add a small "Reset" link/button below each editor that restores `code` to `current.starterCode`. Useful when learners have mangled starter code. One button + one assignment per file (Practice.svelte, Learn.svelte). Already in medium-priority — move up since the keyboard shortcut work is complete.
+
+---
+
 ## Completed
 
+### [DONE 2026-06-09T01:09Z] UX: Run button title="Run (Ctrl+Enter)" — tooltip for keyboard shortcut discoverability in Practice, Learn, Sql
 ### [DONE 2026-06-08T05:08Z] PWA: Offline fallback page — public/offline.html + SW navigate fallback — completed
 ### [DONE 2026-06-08T04:09Z] PWA: SW cache versioning — scripts/patch-sw.js injects UTC timestamp into dist/sw.js at build time; package.json build script updated
 ### [DONE 2026-06-08T03:09Z] CONTENT: ch07-balanced-accuracy-05, ch10-l2-gradient-05 — completed

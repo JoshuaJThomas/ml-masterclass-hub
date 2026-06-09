@@ -2,6 +2,30 @@
 
 ---
 
+## 2026-06-09T01:09Z
+
+**Focus:** UX — add `title="Run (Ctrl+Enter)"` to the Run button in Practice, Learn, and SQL tabs
+
+**Chosen because:** Second highest-priority backlog item (High Priority section). The Ctrl+Enter shortcut has been live since 2026-06-07T03:08Z but there is no UI affordance for it — users who don't read docs never discover it. Adding a `title` attribute makes the shortcut visible on hover with zero risk: one-line change per file, pure HTML attribute, no logic.
+
+**Changes:**
+- `src/lib/views/Practice.svelte` (line 122): added `title="Run (Ctrl+Enter)"` to Run button
+- `src/lib/views/Learn.svelte` (line 103): added `title="Run (Ctrl+Enter)"` to Run button
+- `src/lib/views/Sql.svelte` (line 95): added `title="Run (Ctrl+Enter)"` to Run button
+- `CHANGELOG.md`: one-line entry
+- `docs/gardener/JOURNAL.md`: this entry
+- `docs/gardener/BACKLOG.md`: marked item completed, added 2 new ideas
+
+**Test+build:** 19 files / 70 tests passed; Bank valid: 164 questions across chapters 1-24; SQL bank valid: 14 questions; Lessons valid: 32; build succeeded (benign 631KB chunk warning); patch-sw ran successfully.
+
+**Browser smoke:** browser unavailable (Chromium apt deps blocked in env)
+
+**Outcome:** App-code change — both npm test and npm run build passed — auto-merged (see PR)
+
+**New backlog ideas added:** see BACKLOG.md
+
+---
+
 ## 2026-06-08T05:08Z
 
 **Focus:** PWA — offline fallback page (`public/offline.html`)
