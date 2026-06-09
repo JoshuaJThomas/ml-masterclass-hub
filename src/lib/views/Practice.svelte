@@ -119,7 +119,7 @@
     <CodeEditor bind:value={code} onRun={run} />
 
     <div class="actions">
-      <button class="btn-primary" onclick={run} disabled={running}>{running ? 'Running…' : 'Run'}</button>
+      <button class="btn-primary" onclick={run} disabled={running} title="Run (Ctrl+Enter)">{running ? 'Running…' : 'Run'}</button>
       <button class="btn-secondary" onclick={toggleHint}>{showHint ? 'Hide hint' : 'Show hint'}</button>
       <button class="btn-secondary" onclick={revealSolution}>{showSolution ? 'Hide solution' : 'Reveal solution'}</button>
     </div>
