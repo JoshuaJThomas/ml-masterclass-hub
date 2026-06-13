@@ -5,10 +5,12 @@
   import { loadActivity, currentStreak } from '../srs/activity.js';
   import { chapterMastery, summarize } from '../stats/mastery.js';
   import { loadSqlBank } from '../sql/loadSqlBank.js';
-  import { loadLessons } from '../lessons/loadLessons.js';
-  import { computeGamification } from '../stats/gamification.js';
   import { exportData, importData } from '../srs/backup.js';
   import { getCurrentChapter, setCurrentChapter } from '../settings.js';
+
+  // The "You" destination (DIRECTION.md §2): streak · heatmap · chapter mastery ·
+  // current-chapter setting · backup. XP/levels/badges are gone (Anki, not Duolingo).
+  // No location.reload() anywhere — state re-derives reactively after edits.
 
   let loading = $state(true);
   let error = $state('');
@@ -17,7 +19,6 @@
   let streak = $state(0);
   let heatmap = $state([]);
   let sqlTotals = $state({ total: 0, seen: 0, known: 0 });
-  let game = $state({ xp: 0, level: 1, xpIntoLevel: 0, badges: [], total: 0 });
   let currentChapter = $state(1);
   const MAX_CHAPTER = 24;
 
@@ -39,7 +40,8 @@
     return cells;
   }
 
-  onMount(async () => {
+  async function load() {
+    loading = true; error = '';
     try {
       const { meta, questions } = await loadBank(import.meta.env.BASE_URL);
       const progress = loadProgress();
@@ -52,24 +54,22 @@
       heatmap = buildHeatmap(activity, now);
       try {
         const sqlBank = await loadSqlBank(import.meta.env.BASE_URL);
-        sqlTotals = summarize(sqlBank.map((q) => ({ ...q, chapter: 1 })), progress, 1);
-        try {
-          const lessons = await loadLessons(import.meta.env.BASE_URL);
-          game = computeGamification({ progress, questions, sqlBank, lessons, streak });
-        } catch { /* optional */ }
+        sqlTotals = summarize(sqlBank.map((qq) => ({ ...qq, chapter: 1 })), progress, 1);
       } catch { /* SQL bank optional */ }
     } catch (e) {
       error = String(e.message || e);
     } finally {
       loading = false;
     }
-  });
+  }
+
+  onMount(load);
 
   const pct = (n, d) => (d ? Math.round((n / d) * 100) : 0);
 
   function onChapterChange(e) {
     setCurrentChapter(Number(e.target.value));
-    location.reload();
+    load();
   }
 
   function doExport() {
@@ -86,7 +86,7 @@
     try {
       const obj = JSON.parse(await file.text());
       const r = importData(obj);
-      if (r.ok) location.reload();
+      if (r.ok) load();
       else alert('Import failed: ' + r.error);
     } catch {
       alert('That file is not a valid backup.');
@@ -96,20 +96,13 @@
 
 <section class="container pad">
   {#if loading}
-    <p class="mono-label">LOADING…</p>
+    <div class="skeleton s1"></div>
+    <div class="skeleton s2"></div>
+    <div class="skeleton s2"></div>
   {:else if error}
-    <p class="mono-label" style="color: var(--color-error)">COULD NOT LOAD PROGRESS</p>
-    <p class="body-large">{error}</p>
+    <h1 class="heading-card">Couldn’t load progress</h1>
+    <p class="body-large muted">{error}</p>
   {:else}
-    <p class="mono-label" style="color: var(--color-deep-green)">YOUR PROGRESS</p>
-
-    <div class="setting">
-      <label class="mono-label" for="cc">I'M CURRENTLY ON CHAPTER</label>
-      <select id="cc" value={currentChapter} onchange={onChapterChange}>
-        {#each Array(MAX_CHAPTER) as _, i}<option value={i + 1}>{i + 1}</option>{/each}
-      </select>
-    </div>
-
     <div class="stats">
       <div class="stat"><span class="num">{streak}</span><span class="lbl">day streak</span></div>
       <div class="stat"><span class="num">{totals.known}</span><span class="lbl">mastered</span></div>
@@ -117,31 +110,23 @@
       <div class="stat"><span class="num">{totals.total}</span><span class="lbl">total</span></div>
     </div>
 
-    <div class="level">
-      <p class="mono-label" style="color: var(--color-deep-green)">LEVEL {game.level} · {game.xp} XP</p>
-      <div class="xpbar"><div class="xpfill" style="width: {game.xpIntoLevel}%"></div></div>
-    </div>
-    <div class="badges">
-      {#each game.badges as b}
-        <div class="badge" class:earned={b.earned} title={b.desc}>
-          <span class="bi">{b.earned ? '★' : '☆'}</span>
-          <span>{b.label}</span>
-        </div>
-      {/each}
+    <div class="setting">
+      <label class="mono-label" for="cc">Currently on chapter</label>
+      <select id="cc" value={currentChapter} onchange={onChapterChange}>
+        {#each Array(MAX_CHAPTER) as _, i}<option value={i + 1}>{i + 1}</option>{/each}
+      </select>
     </div>
 
     <h2 class="heading-feature">Activity</h2>
     <div class="heatmap" role="img" aria-label="practice activity, last 84 days">
-      {#each heatmap as cell}
-        <span class="cell lvl{cell.level}" title="{cell.date}: {cell.count}"></span>
-      {/each}
+      {#each heatmap as cell}<span class="cell lvl{cell.level}" title="{cell.date}: {cell.count}"></span>{/each}
     </div>
 
     <h2 class="heading-feature">Mastery by chapter</h2>
     <div class="bars">
       {#each rows as r}
         <div class="bar-row">
-          <span class="bar-label">CH {String(r.chapter).padStart(2, '0')} · {CHAPTER_NAMES[r.chapter] ?? ''}</span>
+          <span class="bar-label">Ch {String(r.chapter).padStart(2, '0')} · {CHAPTER_NAMES[r.chapter] ?? ''}</span>
           <div class="track"><div class="fill" style="width: {pct(r.known, r.total)}%"></div></div>
           <span class="bar-num micro">{r.known}/{r.total}</span>
         </div>
@@ -149,7 +134,7 @@
     </div>
 
     <h2 class="heading-feature">SQL</h2>
-    <p class="body-large">{sqlTotals.known} mastered · {sqlTotals.seen} seen · {sqlTotals.total} total</p>
+    <p class="body-large muted">{sqlTotals.known} mastered · {sqlTotals.seen} seen · {sqlTotals.total} total</p>
 
     <h2 class="heading-feature">Backup</h2>
     <div class="backup">
@@ -162,32 +147,28 @@
 </section>
 
 <style>
-  .pad { padding: var(--space-xxl) 0 var(--space-section); }
-  .stats { display: flex; gap: var(--space-section); flex-wrap: wrap; margin: var(--space-xl) 0 var(--space-section); }
+  .pad { padding: var(--space-6) 0; }
+  .muted { color: var(--color-text-muted); }
+  .stats { display: flex; gap: var(--space-6); flex-wrap: wrap; margin-bottom: var(--space-6); }
   .stat { display: flex; flex-direction: column; }
-  .stat .num { font-family: var(--font-display); font-size: 48px; line-height: 1; color: var(--color-deep-green); }
-  .stat .lbl { font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; color: var(--color-muted); letter-spacing: 0.28px; margin-top: var(--space-xs); }
-  h2 { margin: var(--space-xl) 0 var(--space-lg); }
+  .stat .num { font-size: var(--size-xl); line-height: 1; color: var(--color-text); font-weight: 600; }
+  .stat .lbl { font-size: var(--size-xs); color: var(--color-text-muted); margin-top: var(--space-1); }
+  h2 { margin: var(--space-6) 0 var(--space-3); }
+  .setting { display: flex; align-items: center; gap: var(--space-3); margin: var(--space-3) 0; }
+  .setting label { margin: 0; }
   .heatmap { display: grid; grid-template-columns: repeat(14, 1fr); gap: 4px; max-width: 420px; }
-  .cell { aspect-ratio: 1; border-radius: var(--radius-xs); background: var(--color-soft-stone); }
-  .cell.lvl1 { background: var(--color-pale-green); }
-  .cell.lvl2 { background: #7cc6a8; }
-  .cell.lvl3 { background: var(--color-deep-green); }
-  .bars { display: flex; flex-direction: column; gap: var(--space-md); max-width: 640px; }
-  .bar-row { display: grid; grid-template-columns: 180px 1fr 48px; align-items: center; gap: var(--space-lg); }
-  .bar-label { font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.28px; color: var(--color-ink); }
-  .track { height: 8px; background: var(--color-soft-stone); border-radius: var(--radius-full); overflow: hidden; }
-  .fill { height: 100%; background: var(--color-deep-green); border-radius: var(--radius-full); }
+  .cell { aspect-ratio: 1; border-radius: 3px; background: var(--color-raised-2); }
+  .cell.lvl1 { background: color-mix(in srgb, var(--color-accent) 28%, var(--color-raised-2)); }
+  .cell.lvl2 { background: color-mix(in srgb, var(--color-accent) 60%, var(--color-raised-2)); }
+  .cell.lvl3 { background: var(--color-accent); }
+  .bars { display: flex; flex-direction: column; gap: var(--space-3); max-width: 640px; }
+  .bar-row { display: grid; grid-template-columns: 160px 1fr 48px; align-items: center; gap: var(--space-4); }
+  .bar-label { font-size: var(--size-xs); color: var(--color-text-muted); }
+  .track { height: 8px; background: var(--color-raised-2); border-radius: var(--radius-dot); overflow: hidden; }
+  .fill { height: 100%; background: var(--color-accent); border-radius: var(--radius-dot); }
   .bar-num { text-align: right; }
-  .backup { display: flex; gap: var(--space-xl); align-items: center; }
+  .backup { display: flex; gap: var(--space-4); align-items: center; flex-wrap: wrap; }
   .import { cursor: pointer; }
-  .setting { display: flex; align-items: center; gap: var(--space-md); margin: var(--space-lg) 0; }
-  .setting select { font-family: var(--font-mono); padding: 4px 8px; border: 1px solid var(--color-hairline); border-radius: var(--radius-xs); }
-  .level { margin: var(--space-lg) 0; max-width: 420px; }
-  .xpbar { height: 8px; background: var(--color-soft-stone); border-radius: var(--radius-full); overflow: hidden; margin-top: var(--space-xs); }
-  .xpfill { height: 100%; background: var(--color-deep-green); border-radius: var(--radius-full); }
-  .badges { display: flex; flex-wrap: wrap; gap: var(--space-md); margin-bottom: var(--space-xl); }
-  .badge { display: flex; align-items: center; gap: var(--space-xs); font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.28px; color: var(--color-muted); border: 1px solid var(--color-hairline); border-radius: var(--radius-pill); padding: 4px 12px; }
-  .badge.earned { color: var(--color-deep-green); border-color: var(--color-deep-green); background: var(--color-pale-green); }
-  .badge .bi { font-size: 13px; }
+  .s1 { height: 64px; margin-bottom: var(--space-4); }
+  .s2 { height: 120px; margin-bottom: var(--space-4); }
 </style>

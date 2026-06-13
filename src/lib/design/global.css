@@ -1,85 +1,120 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&family=Space+Mono&display=swap');
+/* Overhaul design language (DIRECTION.md §3) — dark-first OLED, flat, restrained.
+   Inter is self-hosted via @fontsource (imported in main.js); no render-blocking
+   web-font import here. Mono is reserved for the editor/output only.
+   Legacy class names (.card, .btn-*, .mono-label, …) are kept but restyled dark/flat
+   so pre-overhaul views adopt the new look without a per-view rewrite. */
 
 * { box-sizing: border-box; }
 
 html, body {
   margin: 0;
-  background:
-    radial-gradient(1200px 600px at 100% -10%, var(--color-pale-blue), transparent 60%),
-    radial-gradient(900px 480px at -10% 0%, var(--color-win-soft), transparent 55%),
-    var(--color-surface);
-  background-attachment: fixed;
-  color: var(--color-ink);
+  background: var(--color-bg);
+  color: var(--color-text);
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;            /* kill stray horizontal scroll on phones */
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
 }
 body { min-height: 100dvh; }
 
-a { color: var(--color-action-blue); text-decoration: none; }
+::selection { background: color-mix(in srgb, var(--color-accent) 35%, transparent); }
+
+a { color: var(--color-accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-/* Responsive type scale — clamp() so headings shrink on phones (no more 96px hero) */
-.display-hero    { font-family: var(--font-display); font-size: clamp(40px, 12vw, 96px); line-height: 1.02; letter-spacing: -1.5px; font-weight: 500; }
-.heading-section { font-family: var(--font-display); font-size: clamp(28px, 7vw, 48px); line-height: 1.15; letter-spacing: -0.5px; font-weight: 500; }
-.heading-card    { font-family: var(--font-display); font-size: clamp(22px, 5vw, 32px); line-height: 1.2; letter-spacing: -0.3px; font-weight: 500; }
-.heading-feature { font-family: var(--font-display); font-size: clamp(20px, 4.5vw, 24px); line-height: 1.3; font-weight: 500; }
-.body-large      { font-size: clamp(15px, 2.6vw, 18px); line-height: 1.5; }
-.mono-label      { font-family: var(--font-mono); font-size: 13px; line-height: 1.4; letter-spacing: 0.28px; text-transform: uppercase; }
-.micro           { font-size: 12px; line-height: 1.4; color: var(--color-muted); }
+h1, h2, h3, h4 { font-weight: 600; line-height: 1.2; margin: 0; letter-spacing: -0.01em; }
 
-/* Buttons — Cohere-refined pills with depth + a real press */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-control);
+}
+
+/* Type helpers — scale 13/15/17/22/28, sentence case (the ALL-CAPS mono kicker is dead). */
+.display-hero    { font-size: var(--size-xl); line-height: 1.15; font-weight: 600; letter-spacing: -0.02em; }
+.heading-section { font-size: var(--size-xl); line-height: 1.2; font-weight: 600; letter-spacing: -0.02em; }
+.heading-card    { font-size: var(--size-lg); line-height: 1.25; font-weight: 600; letter-spacing: -0.01em; }
+.heading-feature { font-size: var(--size-md); line-height: 1.3; font-weight: 600; }
+.body-large      { font-size: var(--size-md); line-height: 1.55; }
+/* was an ALL-CAPS mono kicker — now a quiet sentence-case label */
+.mono-label      { font-family: var(--font-body); font-size: var(--size-xs); font-weight: 500;
+                   letter-spacing: 0; text-transform: none; color: var(--color-text-muted); }
+.micro           { font-size: var(--size-xs); line-height: 1.4; color: var(--color-text-muted); }
+
+/* Buttons — flat, no pills, no hover-lift. Motion = colour/opacity only, ≤200ms. */
 .btn-primary {
-  background: var(--color-primary); color: var(--color-on-primary);
-  font-family: var(--font-body); font-size: 15px; font-weight: 600;
-  border: none; border-radius: var(--radius-pill); padding: 13px 26px; cursor: pointer;
-  box-shadow: var(--shadow-md);
-  transition: transform .12s cubic-bezier(.2,.8,.2,1), box-shadow .12s ease, opacity .12s ease;
+  background: var(--color-accent); color: var(--color-on-accent);
+  font-family: var(--font-body); font-size: var(--size-sm); font-weight: 600;
+  border: none; border-radius: var(--radius-control); padding: 11px 18px; cursor: pointer;
+  transition: opacity .15s ease, background .15s ease;
 }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-.btn-primary:active { transform: translateY(1px) scale(.99); box-shadow: var(--shadow-sm); }
-.btn-primary:disabled { opacity: .5; cursor: default; transform: none; box-shadow: var(--shadow-sm); }
+.btn-primary:hover { opacity: .92; }
+.btn-primary:active { opacity: .82; }
+.btn-primary:disabled { opacity: .4; cursor: default; }
 
-/* Secondary — ghost pill, no dated underline */
 .btn-secondary {
-  background: var(--color-surface-2); color: var(--color-ink);
-  border: none; border-radius: var(--radius-pill); padding: 10px 18px; cursor: pointer;
-  font-family: var(--font-body); font-size: 14px; font-weight: 500;
-  transition: transform .12s ease, background .12s ease, opacity .12s ease;
+  background: var(--color-raised-2); color: var(--color-text);
+  border: 1px solid var(--color-border); border-radius: var(--radius-control);
+  padding: 9px 16px; cursor: pointer;
+  font-family: var(--font-body); font-size: var(--size-sm); font-weight: 500;
+  transition: background .15s ease, opacity .15s ease;
 }
-.btn-secondary:hover { background: var(--color-hairline); transform: translateY(-1px); }
-.btn-secondary:active { transform: translateY(1px); }
-.btn-secondary:disabled { opacity: .45; cursor: default; transform: none; }
+.btn-secondary:hover { background: color-mix(in srgb, var(--color-raised-2) 70%, var(--color-text) 6%); }
+.btn-secondary:active { opacity: .8; }
+.btn-secondary:disabled { opacity: .4; cursor: default; }
 
-/* Chip — small soft action (hints, toggles) */
 .btn-chip {
   display: inline-flex; align-items: center; gap: 6px;
-  background: var(--color-surface-2); color: var(--color-body-muted);
-  border: none; border-radius: var(--radius-pill); padding: 7px 14px; cursor: pointer;
-  font-family: var(--font-body); font-size: 13px; font-weight: 500;
-  transition: transform .12s ease, background .12s ease, color .12s ease;
+  background: transparent; color: var(--color-text-muted);
+  border: 1px solid var(--color-border); border-radius: var(--radius-control);
+  padding: 6px 12px; cursor: pointer;
+  font-family: var(--font-body); font-size: var(--size-xs); font-weight: 500;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
 }
-.btn-chip:hover { background: var(--color-hairline); color: var(--color-ink); transform: translateY(-1px); }
-.btn-chip:active { transform: translateY(1px); }
+.btn-chip:hover { color: var(--color-text); border-color: var(--color-text-muted); }
+.btn-chip[aria-pressed="true"], .btn-chip.active {
+  color: var(--color-on-accent); background: var(--color-accent); border-color: var(--color-accent);
+}
 
-/* Streak / XP context pills */
 .stat-pill {
   display: inline-flex; align-items: center; gap: 6px;
-  border-radius: var(--radius-pill); padding: 6px 12px;
-  font-family: var(--font-body); font-weight: 600; font-size: 14px;
-  background: var(--color-surface-2);
+  border-radius: var(--radius-control); padding: 6px 12px;
+  font-family: var(--font-body); font-weight: 600; font-size: var(--size-sm);
+  background: var(--color-raised-2); color: var(--color-text);
 }
 
 .card {
-  background: var(--color-canvas); border: 1px solid var(--color-card-border);
-  border-radius: var(--radius-lg); padding: var(--space-xl);
-  box-shadow: var(--shadow-md);
+  background: var(--color-raised); border: 1px solid var(--color-border);
+  border-radius: var(--radius-card); padding: var(--space-6);
 }
-.container { max-width: 1100px; margin: 0 auto; padding: 0 var(--space-lg); }
-@media (min-width: 720px) { .container { padding: 0 var(--space-xl); } }
+
+.container { max-width: 760px; margin: 0 auto; padding: 0 var(--space-4); }
+
+/* Form controls — dark inputs */
+input, select, textarea {
+  background: var(--color-raised-2); color: var(--color-text);
+  border: 1px solid var(--color-border); border-radius: var(--radius-control);
+  font-family: var(--font-body); font-size: var(--size-sm); padding: 9px 12px;
+}
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline-offset: 0; border-color: var(--color-accent); }
+
+code, pre, kbd { font-family: var(--font-mono); }
+
+/* Skeleton loaders — never the word "LOADING…". */
+.skeleton {
+  position: relative; overflow: hidden;
+  background: var(--color-raised-2); border-radius: var(--radius-control);
+}
+.skeleton::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-text) 6%, transparent), transparent);
+  transform: translateX(-100%); animation: skeleton-shimmer 1.2s ease-in-out infinite;
+}
+@keyframes skeleton-shimmer { 100% { transform: translateX(100%); } }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+  .skeleton::after { animation: none; }
 }
